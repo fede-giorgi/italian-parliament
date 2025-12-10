@@ -291,21 +291,88 @@ ggplot(map_ready) +
 
 ```{r}
 
-# 1. Compare the Region Names
-print("--- DATA NAMES (First 10) ---")
-df_college_winners |> head(10) |> pull(join_key) |> print()
+# --- 1. DEFINE COALITIONS ---
+# We create a helper function or logic to group parties
+get_coalition <- function(party) {
+  case_when(
+    party %in% c("FdI", "Lega", "FI", "NM") ~ "Center-Right",
+    party %in% c("PD", "AVS", "Az-IV", "SVP") ~ "Center-Left", # Az-IV sometimes runs alone, but often groups here for visuals
+    party == "M5S" ~ "M5S",
+    TRUE ~ "Other"
+  )
+}
 
-print("--- MAP NAMES (First 10) ---")
-map_pluri |> 
-  mutate(clean_name = str_to_upper(CP20_DEN) |> str_remove_all("[^A-Z0-9]")) |> 
-  pull(clean_name) |> head(10) |> print()
+# --- 2. PREPARE DATA ---
+df_coalition_winners <- df_deputati_final |>
+  left_join(df_elezioni |> select(id_numerico, coverage), by = "id_numerico") |>
+  filter(str_detect(coverage, "P\\d+")) |>
+  
+  # Clean Names (Same as before)
+  mutate(
+    coverage_clean = coverage,
+    coverage_clean = str_replace(coverage_clean, "S\\\\u00DCDTIROL", "SUDTIROL"),
+    coverage_clean = str_replace(coverage_clean, "SÜDTIROL", "SUDTIROL"),
+    coverage_clean = str_replace(coverage_clean, "VALLE D'AOSTA", "VALLE D AOSTA"),
+    coverage_clean = str_replace(coverage_clean, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
+    join_key = str_to_upper(coverage_clean) |> str_remove_all("[^A-Z0-9]")
+  ) |>
+  
+  # --- NEW STEP: Group by Coalition ---
+  mutate(coalition = get_coalition(party_acronym)) |>
+  
+  # Count deputies per COALITION per College
+  count(join_key, coalition) |>
+  group_by(join_key) |>
+  slice_max(n, n = 1, with_ties = FALSE) |> 
+  ungroup()
 
-# 2. Check for Roman Numeral mismatch (e.g., LAZIO1 vs LAZIOI)
+# --- 3. COLORS FOR COALITIONS ---
+coalition_colors <- c(
+  "Center-Right" = "#003366", # Dark Blue
+  "Center-Left"  = "#EF3E36", # Red
+  "M5S"          = "#F4C430", # Yellow
+  "Other"        = "#999999"  # Grey
+)
 
-df_deputati_final |> 
-  filter(party_acronym == "Unknown/Misto") |> 
-  count(final_party_raw, sort = TRUE)
+# --- 4. PLOT ---
+map_ready_coalition <- map_pluri |>
+  mutate(
+    temp_name = str_to_upper(CP20_DEN),
+    # ... (Include all your map name cleaning lines from previous step here) ...
+    temp_name = str_replace(temp_name, "SÜDTIROL", "SUDTIROL"),
+    temp_name = str_replace(temp_name, "VALLE D'AOSTA", "VALLE D AOSTA"),
+    temp_name = str_replace(temp_name, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
+    temp_name = str_replace(temp_name, "LAZIO I", "LAZIO 1"),
+    temp_name = str_replace(temp_name, "LAZIO II", "LAZIO 2"),
+    temp_name = str_replace(temp_name, "SICILIA I", "SICILIA 1"),
+    temp_name = str_replace(temp_name, "SICILIA II", "SICILIA 2"),
+    temp_name = str_replace(temp_name, "VENETO I", "VENETO 1"),
+    temp_name = str_replace(temp_name, "VENETO II", "VENETO 2"),
+    temp_name = str_replace(temp_name, "CAMPANIA I", "CAMPANIA 1"),
+    temp_name = str_replace(temp_name, "CAMPANIA II", "CAMPANIA 2"),
+    temp_name = str_replace(temp_name, "PIEMONTE I", "PIEMONTE 1"),
+    temp_name = str_replace(temp_name, "PIEMONTE II", "PIEMONTE 2"),
+    temp_name = str_replace(temp_name, "LOMBARDIA I", "LOMBARDIA 1"),
+    temp_name = str_replace(temp_name, "LOMBARDIA II", "LOMBARDIA 2"),
+    temp_name = str_replace(temp_name, "LOMBARDIA III", "LOMBARDIA 3"),
+    temp_name = str_replace(temp_name, "LOMBARDIA IV", "LOMBARDIA 4"),
+    join_key = str_remove_all(temp_name, "[^A-Z0-9]")
+  ) |>
+  left_join(df_coalition_winners, by = "join_key")
+
+ggplot(map_ready_coalition) +
+  geom_sf(aes(fill = coalition), color = "white", size = 0.1) +
+  scale_fill_manual(values = coalition_colors, na.value = "grey80") +
+  theme_void() +
+  labs(
+    title = "Political Map by Coalition",
+    subtitle = "Right vs Left vs M5S",
+    fill = "Coalition"
+  )
 ```
+
+
+
 
 
 ### Gender Balance: the Meloni Paradix
@@ -393,6 +460,65 @@ ggplot(df_gender_plot, aes(x = party_acronym, y = plot_pct, fill = gender)) +
     fill = ""
   )
 ```
+
+
+```{r gender_education_gap_final}
+# 1. DATA PREPARATION
+df_education_gender <- df_deputati_final |>
+  left_join(df_deputati, by = "id_numerico") |>
+  filter(party_acronym != "Unknown/Misto") |>
+  
+  mutate(
+    gender_label = ifelse(gender == "female", "Female", "Male"),
+    
+    # Step 1: Extract Degree info
+    # We scan for "Laurea". If found, it's "Graduate", otherwise "Other".
+    raw_education = ifelse(
+      str_detect(description, regex("Laurea", ignore_case = TRUE)), 
+      "Graduate", 
+      "Other"
+    ),
+    
+    # Step 2: NUCLEAR FIX for NAs
+    # If the description was empty (NA), the code above might yield NA.
+    # We force those NAs to become "Other".
+    clean_education = replace_na(raw_education, "Other"),
+    
+    # Step 3: Set Factor Levels
+    # We define only two levels. 
+    education_level = factor(clean_education, levels = c("Graduate", "Other"))
+  )
+
+# 2. PLOTTING
+ggplot(df_education_gender, aes(x = gender_label, fill = education_level)) +
+  
+  # reverse = TRUE forces the first factor level ("Graduate") to the bottom
+  geom_bar(position = position_fill(reverse = TRUE), width = 0.7) +
+  
+  facet_wrap(~ party_acronym, nrow = 2) + 
+  
+  # Colors
+  scale_fill_manual(values = c("Graduate" = "cornflowerblue", "Other" = "#CCCCCC")) +
+  
+  scale_y_continuous(labels = scales::percent) +
+  
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    legend.position = "top",
+    axis.text.x = element_text(face = "bold"),
+    strip.text = element_text(face = "bold", size = 11)
+  ) +
+  
+  labs(
+    title = "Education Gap by Gender & Party",
+    subtitle = "Percentage of Graduates (Green/Bottom) vs Others (Grey/Top)",
+    x = "", 
+    y = "% of Group", 
+    fill = "Education"
+  )
+```
+
 
 ### Professional Background: The Rise of Career Politicians
 
