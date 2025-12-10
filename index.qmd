@@ -1,1 +1,23 @@
 # Introduction
+
+For the international observer, Italian politics is often reduced to a caricature of instability: a revolving door of Prime Ministers, technocratic crisis managers, and executives that barely last longer than a football season. Since the birth of the Republic in 1946, Italy has seen nearly 70 different governments: an average of one every 13 months.
+
+For us, as two Italians, this volatility is not just a statistic; it is the background noise of our civic lives. We are accustomed to a system designed to prevent authoritarianism but often accused of breeding paralysis. We know the rituals: the consultations at the Quirinale, the votes of confidence, and the constant reshuffling of alliances.
+
+However, the current XIX Legislature offers a rare opportunity for analysis. For the first time in years, the Chamber of Deputies is not held hostage by a fragile coalition, but is driven by a clear political majority. This shift changes the physics of the parliamentary hall. It moves the conversation from "will the government survive the night?" to "how is the legislative machine actually functioning?"
+
+Beneath the headlines and the talk-show rhetoric, the Parliament is a massive data generator. Every electronic vote, every committee attendance, and every legislative text leaves a digital footprint.
+
+In this project, we move beyond the narrative of instability to look at the empirical reality. Using the Linked Open Data provided by the Camera dei Deputati we aim to perform a quantitative autopsy of the current term.
+
+By visualizing thousands of data points, we explore the mechanics of this unique political engine:
+
+-   **The Stability Test**: In a country famous for short-lived governments, does a solid majority translate into streamlined lawmaking? Or does the data show the same friction and "snipers" (franchi tiratori) as in the past?
+
+-   **The Geometry of Consensus**: Does the narrative of a polarized country hold up in the voting records? Or do the majority of technical laws pass with a "Bulgarian" unanimity, revealing a hidden cooperation between government and opposition?
+
+-   **The Price of Presence**: Beyond the famous leaders, who are the true workers of the Republic? We analyze the gap between those who merely sign in for the daily allowance and those who carry the burden of multiple Commission assignments.
+
+-   **The Geography of Representation**: Italy is a nation of distinct regional identities. By linking deputies to their election districts, can we see if voting behavior is dictated by party discipline or by the territories they represent (North vs. South)?
+
+This is not just a study of laws; it is a data-driven tour of the Italian Parliament, stripping away the instability to see how the Republic actually works.

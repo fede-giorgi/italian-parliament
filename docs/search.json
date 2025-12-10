@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "YOUR PROJECT TITLE",
+    "title": "italian parliament",
     "section": "",
-    "text": "1 Introduction",
+    "text": "1 Introduction\nFor the international observer, Italian politics is often reduced to a caricature of instability: a revolving door of Prime Ministers, technocratic crisis managers, and executives that barely last longer than a football season. Since the birth of the Republic in 1946, Italy has seen nearly 70 different governments: an average of one every 13 months.\nFor us, as two Italians, this volatility is not just a statistic; it is the background noise of our civic lives. We are accustomed to a system designed to prevent authoritarianism but often accused of breeding paralysis. We know the rituals: the consultations at the Quirinale, the votes of confidence, and the constant reshuffling of alliances.\nHowever, the current XIX Legislature offers a rare opportunity for analysis. For the first time in years, the Chamber of Deputies is not held hostage by a fragile coalition, but is driven by a clear political majority. This shift changes the physics of the parliamentary hall. It moves the conversation from “will the government survive the night?” to “how is the legislative machine actually functioning?”\nBeneath the headlines and the talk-show rhetoric, the Parliament is a massive data generator. Every electronic vote, every committee attendance, and every legislative text leaves a digital footprint.\nIn this project, we move beyond the narrative of instability to look at the empirical reality. Using the Linked Open Data provided by the Camera dei Deputati we aim to perform a quantitative autopsy of the current term.\nBy visualizing thousands of data points, we explore the mechanics of this unique political engine:\n\nThe Stability Test: In a country famous for short-lived governments, does a solid majority translate into streamlined lawmaking? Or does the data show the same friction and “snipers” (franchi tiratori) as in the past?\nThe Geometry of Consensus: Does the narrative of a polarized country hold up in the voting records? Or do the majority of technical laws pass with a “Bulgarian” unanimity, revealing a hidden cooperation between government and opposition?\nThe Price of Presence: Beyond the famous leaders, who are the true workers of the Republic? We analyze the gap between those who merely sign in for the daily allowance and those who carry the burden of multiple Commission assignments.\nThe Geography of Representation: Italy is a nation of distinct regional identities. By linking deputies to their election districts, can we see if voting behavior is dictated by party discipline or by the territories they represent (North vs. South)?\n\nThis is not just a study of laws; it is a data-driven tour of the Italian Parliament, stripping away the instability to see how the Republic actually works.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
@@ -14,7 +14,7 @@
     "href": "data.html",
     "title": "2  Data",
     "section": "",
-    "text": "2.1 Description",
+    "text": "2.1 Description\nThis project relies on the official Linked Open Data (LOD) repository maintained by the Camera dei Deputati (Chamber of Deputies). Unlike static archival datasets, this repository functions as a living digital archive of the Italian Republic, updated continuously to reflect parliamentary activity in real-time.\nThe analysis focuses specifically on the XIX Legislature, which commenced on October 13, 2022. This period represents a significant break in the recent history of Italian political instability, characterized by a clear electoral winner and a defined parliamentary majority.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]
@@ -25,6 +25,86 @@
     "title": "2  Data",
     "section": "2.2 Missing value analysis",
     "text": "2.2 Missing value analysis",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
+  },
+  {
+    "objectID": "results.html",
+    "href": "results.html",
+    "title": "3  Results",
+    "section": "",
+    "text": "4 — LIBRARIES —\nlibrary(tidyverse) library(stringr) library(ggplot2) library(lubridate) # Required for date handling (ymd function)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#the-stability-test",
+    "href": "results.html#the-stability-test",
+    "title": "3  Results",
+    "section": "41.1 The Stability Test",
+    "text": "41.1 The Stability Test",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#the-geometry-of-consensus",
+    "href": "results.html#the-geometry-of-consensus",
+    "title": "3  Results",
+    "section": "41.2 The Geometry of Consensus",
+    "text": "41.2 The Geometry of Consensus",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#the-price-of-presence",
+    "href": "results.html#the-price-of-presence",
+    "title": "3  Results",
+    "section": "41.3 The Price of Presence",
+    "text": "41.3 The Price of Presence",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#the-geography-of-representation",
+    "href": "results.html#the-geography-of-representation",
+    "title": "3  Results",
+    "section": "41.4 The Geography of Representation",
+    "text": "41.4 The Geography of Representation",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#structure-and-dimensions",
+    "href": "data.html#structure-and-dimensions",
+    "title": "2  Data",
+    "section": "2.2 Structure and Dimensions",
+    "text": "2.2 Structure and Dimensions\nUnlike the flat, wide-format CSV files common in political science research, the primary source data is structured as a semantic graph (RDF/XML). To make this complex web of relationships accessible for quantitative analysis, the data has been parsed and flattened into four distinct, relational dataframes using the R statistical environment:\n\nVotazioni (votazione-19.rdf): The core dataset containing the outcomes of parliamentary votes. It includes metadata on the subject of the vote (e.g., amendments, confidence votes), the type of voting procedure (electronic, secret ballot), and the aggregate tallies (Present, Voting, Ayes, Nays, Abstentions).\nSedute (seduta-19.rdf): The “calendar” of the Chamber. This dataset links every vote to a specific session date and type (Assembly vs. Committee), providing the temporal backbone necessary to analyze the rhythm of legislative work.\nDeputati (deputato-19.rdf): The demographic registry of the 400 elected officials. It contains personal attributes such as gender, age, profession, and education level, allowing for a sociological profiling of the ruling class.\nElezioni (elezione-19.rdf): The geographic link. This file connects individual deputies to their specific electoral colleges and constituencies, enabling spatial analysis of representation across the Italian peninsula.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#data-quality-and-limitations",
+    "href": "data.html#data-quality-and-limitations",
+    "title": "2  Data",
+    "section": "2.3 Data Quality and Limitations",
+    "text": "2.3 Data Quality and Limitations\nThe transition from Semantic Web standards (triplets) to tabular data presents specific challenges. A preliminary review confirms that while the numerical data (vote counts) is robust and complete, the categorical metadata requires significant harmonization.\nSpecifically, the “Missing Data Analysis” reveals a structural limitation regarding Parliamentary Groups (parties). In the raw RDF structure, party affiliation is often referenced via “Blank Nodes” or links to external datasets (organo.rdf) not included in this specific snapshot. Consequently, while we can track the behavior of individual deputies with high precision, mapping them to their specific political parties requires inferential matching or supplementary data collection.\nFurthermore, the dataset distinguishes between the theoretical composition of the Chamber and the active workforce. Resignations, substitutions (subentri), and deaths create a fluctuating number of active IDs, which must be normalized to avoid skewing attendance metrics.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#access",
+    "href": "data.html#access",
+    "title": "2  Data",
+    "section": "2.4 Access",
+    "text": "2.4 Access\nThe data is publicly available through the dati.camera.it portal under an Open Data license (CC-BY 4.0), ensuring transparency and reproducibility. While the Chamber provides the raw RDF dumps, the parsing algorithms used to transform these triplets into the R dataframes used in this study are original to this project.\nThe datasets analyzed are sourced from the following official endpoints:\n\nVotazioni: XIX Legislature Voting Records (RDF/XML)\nDeputati: Registry of Elected Officials (RDF/XML)\nSedute: Calendar of Parliamentary Sessions (RDF/XML)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]

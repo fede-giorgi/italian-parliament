@@ -2,4 +2,38 @@
 
 ## Description
 
-## Missing value analysis
+This project relies on the official Linked Open Data (LOD) repository maintained by the **Camera dei Deputati (Chamber of Deputies)**. Unlike static archival datasets, this repository functions as a living digital archive of the Italian Republic, updated continuously to reflect parliamentary activity in real-time.
+
+The analysis focuses specifically on the XIX Legislature, which commenced on October 13, 2022. This period represents a significant break in the recent history of Italian political instability, characterized by a clear electoral winner and a defined parliamentary majority.
+
+## Structure and Dimensions
+
+Unlike the flat, wide-format CSV files common in political science research, the primary source data is structured as a **semantic graph (RDF/XML)**. To make this complex web of relationships accessible for quantitative analysis, the data has been parsed and flattened into four distinct, relational dataframes using the R statistical environment:
+
+-   `Votazioni (votazione-19.rdf)`: The core dataset containing the outcomes of parliamentary votes. It includes metadata on the subject of the vote (e.g., amendments, confidence votes), the type of voting procedure (electronic, secret ballot), and the aggregate tallies (Present, Voting, Ayes, Nays, Abstentions).
+
+-   `Sedute (seduta-19.rdf)`: The "calendar" of the Chamber. This dataset links every vote to a specific session date and type (Assembly vs. Committee), providing the temporal backbone necessary to analyze the rhythm of legislative work.
+
+-   `Deputati (deputato-19.rdf)`: The demographic registry of the 400 elected officials. It contains personal attributes such as gender, age, profession, and education level, allowing for a sociological profiling of the ruling class.
+
+-   `Elezioni (elezione-19.rdf)`: The geographic link. This file connects individual deputies to their specific electoral colleges and constituencies, enabling spatial analysis of representation across the Italian peninsula.
+
+## Data Quality and Limitations
+
+The transition from Semantic Web standards (triplets) to tabular data presents specific **challenges**. A preliminary review confirms that while the numerical data (vote counts) is robust and complete, the categorical metadata requires significant harmonization.
+
+Specifically, the "Missing Data Analysis" reveals a structural limitation regarding Parliamentary Groups (parties). In the raw RDF structure, party affiliation is often referenced via "Blank Nodes" or links to external datasets (organo.rdf) not included in this specific snapshot. Consequently, while we can track the behavior of individual deputies with high precision, mapping them to their specific political parties requires inferential matching or supplementary data collection.
+
+Furthermore, the dataset distinguishes between the theoretical composition of the Chamber and the active workforce. Resignations, substitutions (subentri), and deaths create a fluctuating number of active IDs, which must be normalized to avoid skewing attendance metrics.
+
+## Access
+
+The data is publicly available through the dati.camera.it portal under an Open Data license (CC-BY 4.0), ensuring transparency and reproducibility. While the Chamber provides the raw RDF dumps, the parsing algorithms used to transform these triplets into the R dataframes used in this study are original to this project.
+
+The datasets analyzed are sourced from the following official endpoints:
+
+-   Votazioni: XIX Legislature Voting Records (RDF/XML)
+
+-   Deputati: Registry of Elected Officials (RDF/XML)
+
+-   Sedute: Calendar of Parliamentary Sessions (RDF/XML)

@@ -8,10 +8,10 @@ execute:
   message: false
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "italian parliament"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
+    - Federico Giorgi (fg2617)
+    - Rencong Jiang (rj2798)
   repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
   date: today
   page-footer:
