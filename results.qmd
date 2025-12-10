@@ -206,6 +206,108 @@ df_deputati_final |>
   )
 ```
 
+
+```{r map_plurinominal}
+
+# --- 1. SETUP ---
+library(sf)
+library(tidyverse)
+# Update this path to your PLURINOMINALI folder
+shapefile_path <- "/Users/dian/italian-parliament/CAMERA_CollegiPLURINOMINALI_2020/CAMERA_CollegiPLURINOMINALI_2020.shp"
+map_pluri <- read_sf(shapefile_path)
+
+# --- 2. CLEAN DATA & FIX REGION NAMES ---
+df_cleaned_winners <- df_deputati_final |>
+  left_join(df_elezioni |> select(id_numerico, coverage), by = "id_numerico") |>
+  filter(str_detect(coverage, "P\\d+")) |>
+  
+  # --- FIX 1: MANUAL NAME CORRECTION ---
+  mutate(
+    coverage_clean = coverage,
+    # Fix Trentino (Remove the Unicode mess)
+    coverage_clean = str_replace(coverage_clean, "S\\\\u00DCDTIROL", "SUDTIROL"),
+    coverage_clean = str_replace(coverage_clean, "SÜDTIROL", "SUDTIROL"),
+    # Fix Valle d'Aosta (Remove apostrophe issues)
+    coverage_clean = str_replace(coverage_clean, "VALLE D'AOSTA", "VALLE D AOSTA"),
+    # Fix Friuli (Standardize hyphens)
+    coverage_clean = str_replace(coverage_clean, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
+    
+    # Create the Join Key (Uppercase, No spaces, No non-alphanumeric)
+    join_key = str_to_upper(coverage_clean) |> str_remove_all("[^A-Z0-9]")
+  ) |>
+  
+  # --- FIX 2: HANDLE "MISTO" ---
+  # Filter out "Misto" so we see the winning POLITICAL party, not the mixed group
+  filter(party_acronym != "Misto", party_acronym != "Unknown/Misto") |>
+  
+  # AGGREGATE: Find winner per college
+  count(join_key, party_acronym) |>
+  group_by(join_key) |>
+  slice_max(n, n = 1, with_ties = FALSE) |> 
+  ungroup()
+
+# --- 3. CLEAN MAP ---
+map_ready <- map_pluri |>
+  mutate(
+    # Apply EXACTLY the same fixes to the Map Names
+    temp_name = str_to_upper(CP20_DEN),
+    temp_name = str_replace(temp_name, "SÜDTIROL", "SUDTIROL"),
+    temp_name = str_replace(temp_name, "VALLE D'AOSTA", "VALLE D AOSTA"),
+    temp_name = str_replace(temp_name, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
+    
+    # Handle Roman Numerals (Common in Map files)
+    temp_name = str_replace(temp_name, "LAZIO I", "LAZIO 1"),
+    temp_name = str_replace(temp_name, "LAZIO II", "LAZIO 2"),
+    temp_name = str_replace(temp_name, "SICILIA I", "SICILIA 1"),
+    temp_name = str_replace(temp_name, "SICILIA II", "SICILIA 2"),
+    temp_name = str_replace(temp_name, "VENETO I", "VENETO 1"),
+    temp_name = str_replace(temp_name, "VENETO II", "VENETO 2"),
+    temp_name = str_replace(temp_name, "CAMPANIA I", "CAMPANIA 1"),
+    temp_name = str_replace(temp_name, "CAMPANIA II", "CAMPANIA 2"),
+    temp_name = str_replace(temp_name, "PIEMONTE I", "PIEMONTE 1"),
+    temp_name = str_replace(temp_name, "PIEMONTE II", "PIEMONTE 2"),
+    temp_name = str_replace(temp_name, "LOMBARDIA I", "LOMBARDIA 1"),
+    temp_name = str_replace(temp_name, "LOMBARDIA II", "LOMBARDIA 2"),
+    temp_name = str_replace(temp_name, "LOMBARDIA III", "LOMBARDIA 3"),
+    temp_name = str_replace(temp_name, "LOMBARDIA IV", "LOMBARDIA 4"),
+
+    # Final Join Key
+    join_key = str_remove_all(temp_name, "[^A-Z0-9]")
+  ) |>
+  left_join(df_cleaned_winners, by = "join_key")
+
+# --- 4. PLOT ---
+ggplot(map_ready) +
+  geom_sf(aes(fill = party_acronym), color = "white", size = 0.1) +
+  scale_fill_manual(values = party_colors, na.value = "grey80") +
+  theme_void() +
+  labs(
+    title = "Political Map (Plurinominal Colleges)",
+    subtitle = "Largest Party by District (Excluding Misto)",
+    fill = "Party"
+  )
+```
+
+
+```{r}
+
+# 1. Compare the Region Names
+print("--- DATA NAMES (First 10) ---")
+df_college_winners |> head(10) |> pull(join_key) |> print()
+
+print("--- MAP NAMES (First 10) ---")
+map_pluri |> 
+  mutate(clean_name = str_to_upper(CP20_DEN) |> str_remove_all("[^A-Z0-9]")) |> 
+  pull(clean_name) |> head(10) |> print()
+
+# 2. Check for Roman Numeral mismatch (e.g., LAZIO1 vs LAZIOI)
+
+df_deputati_final |> 
+  filter(party_acronym == "Unknown/Misto") |> 
+  count(final_party_raw, sort = TRUE)
+```
+
+
 ### Gender Balance: the Meloni Paradix
 
 Italy faces a fascinating contradiction. The ultimate "glass ceiling" was broken by the Right, with **Giorgia Meloni** becoming the first female Prime Minister in the Republic's history.
