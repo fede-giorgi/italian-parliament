@@ -533,68 +533,229 @@ df_votazioni |>
   )
 ```
 
-# 3. Story III: The Geometry of Consensus
+# 3. The Geometry of Consensus
 
 Is the parliament paralyzed by polarization? Or is there hidden cooperation?
 
-### The Stability Test
+### The Stability Test: Measuring Government Muscle
 
-The Blue Line represents the government's strength. If it stays above the Red Line (201 votes), the majority is safe. The trend shows a stable government, immune to the "snipers" that plagued previous legislatures.
+Does the solid majority on paper translate into actual voting power? 
+To test this, we analyzed the trend of **approved motions** over time, isolating only the moments when the Government successfully pushed legislation through.
+
+The data tells a nuanced story. While the trend line shows a **slight physiological decline**—typical as the initial "honeymoon period" fades and routine sets in—it floats comfortably above the **absolute majority threshold (201 seats)**. 
+This indicates a coalition that may experience minor erosion but maintains a safe safety margin, avoiding the cliff-edge scenarios of previous unstable legislatures.
 
 ```{r stability}
-df_votazioni  |>
-  mutate(date = ymd(date))  |> filter(!is.na(date), votanti > 100)  |>
+df_votazioni |>
+  mutate(date = ymd(date)) |> 
+  # Filter for meaningful votes (Quorum > 100)
+  filter(!is.na(date), votanti > 100) |>
+  filter(favorevoli > contrari) |>
+  
   ggplot(aes(x = date, y = favorevoli)) +
+  
+  # Scatter points (Low opacity to show density)
   geom_point(alpha = 0.1, color = "grey60") +
-  geom_smooth(method = "loess", color = "#003366", fill = "#ADD8E6", span = 0.2) +
-  geom_hline(yintercept = 201, linetype = "dashed", color = "red") +
+  
+  # Trend Line (LOESS)
+  geom_smooth(method = "loess", color = "#003366", fill = "#ADD8E6", span = 0.3) +
+  
+  # Reference Threshold
+  geom_hline(yintercept = 201, linetype = "dashed", color = "red", size = 1) +
+  
+  # Annotations
+  annotate("text", x = min(ymd(df_votazioni$date), na.rm=TRUE), y = 190, 
+           label = "Majority Threshold (201)", color = "red", hjust = 0, vjust = 1, size = 3.5) +
+  
   theme_minimal() +
-  labs(title = "Government Stability Trend", subtitle = "Votes in Favor over time (Red line = Absolute Majority)", x = "Date", y = "Votes in Favor")
+  labs(
+    title = "Government Strength Trend", 
+    subtitle = "Number of 'Votes in Favor' for passed legislation (Trend vs Threshold)", 
+    x = "", 
+    y = "Votes in Favor"
+  )
 ```
 
-### Polarization vs. Consensus
+### Polarization vs. Consensus: The Three Clusters
 
-This scatterplot reveals the truth. While the "Blue Cloud" in the center shows political conflict, the cluster of green points in the top-left corner (Zero Nays) proves that **many laws pass with broad consensus**. It is not always a war.
+If one were to judge Italian politics solely by talk shows, the conclusion would be one of perpetual chaos. However, mapping the votes reveals a precise **Geometry of Power** composed of three distinct behaviors.
+
+This scatterplot maps every vote based on "Nays" (X-axis) vs "Ayes" (Y-axis). The data clusters into three logical zones:
+
+* **The Green Corner (Institutional Peace):** Top-left. Hundreds of votes with near-zero opposition. These are technical ratifications where the Chamber acts as a unified body.
+* **The Blue Cloud (Majority Advance):** Top-center. The Government passes its laws. The opposition fights (voting against), but the majority numbers hold firm.
+* **The Red Zone (Majority Barrier):** Bottom-right. This area, dense with "Nays", represents **Minority proposals rejected by the Majority**. It is not the Government losing; it is the Government flexing its muscles to block Opposition amendments.
 
 ```{r scatter_consensus}
-df_vote_analysis <- df_votazioni  |> filter(votanti > 50)  |>
-  mutate(outcome = case_when(contrari < 20 ~ "Unanimous", favorevoli > contrari ~ "Majority Won", TRUE ~ "Opposition Won"))
+# 1. Data Classification
+df_vote_analysis <- df_votazioni |> 
+  filter(votanti > 50) |>
+  mutate(
+    outcome = case_when(
+      # Case A: Unanimous (Peace)
+      # Very few votes against (< 20) indicate broad consensus
+      contrari < 20 ~ "Unanimous / Technical",
+      
+      # Case B: Majority Approved (Govt Wins)
+      # The motion passes. This represents Govt laws overcoming opposition.
+      favorevoli > contrari ~ "Majority Approved",
+      
+      # Case C: Minority Rejected (Govt Blocks)
+      # The motion fails (Nays > Ayes). 
+      # In a stable legislature, these are overwhelmingly Opposition proposals voted down by the Majority.
+      TRUE ~ "Minority Proposal Rejected"
+    )
+  )
 
+# 2. Visualization
 ggplot(df_vote_analysis, aes(x = contrari, y = favorevoli, color = outcome)) +
+  
+  # Scatter Points
   geom_point(alpha = 0.6) +
-  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "grey") +
-  scale_color_manual(values = c("Unanimous"="#2E8B57", "Majority Won"="#4682B4", "Opposition Won"="#CD5C5C")) +
+  
+  # The "Tie" Line (x = y)
+  # Points below this line are rejected motions. Points above are approved.
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "grey50") +
+  
+  # Colors reflecting the logic
+  scale_color_manual(values = c(
+    "Unanimous / Technical" = "#2E8B57",    # Green: Harmony
+    "Majority Approved" = "#4682B4",        # Blue: Govt Constructive Power
+    "Minority Proposal Rejected" = "#CD5C5C" # Red: Govt Blocking Power
+  )) +
+  
   theme_minimal() +
-  labs(title = "The Geometry of Consensus", x = "Votes Against", y = "Votes In Favor", color = "Outcome")
+  
+  # Final Labels
+  labs(
+    title = "The Geometry of Consensus & Conflict", 
+    subtitle = "Analysis of Parliamentary dynamics: Approval, Rejection, and Unanimity", 
+    x = "Votes Against (Nays)", 
+    y = "Votes In Favor (Ayes)", 
+    color = "Vote Dynamics"
+  )
 ```
 
-### Strategic Abstention
+### Strategic Abstention: The Art of Non-Belligerence
 
-The "Purple Zone". These dots represent moments where the opposition decided not to vote "No", but to abstain. This is the empirical evidence of compromise: letting a law pass without officially supporting it.
+In a binary world of "Ayes" and "Nays," abstention is a powerful political signal. It is the "Third Way."
+When the opposition abstains en masse, they are effectively saying: *"We do not support this law, but we will not stop it."*
+
+This usually happens in two scenarios:
+
+* **Tactical Agreements:** The government accepts an opposition amendment in exchange for a "soft" vote (abstention instead of rejection).
+* **Shared Responsibility:** On sensitive topics (foreign policy, ethical issues), voting against might be unpopular, so parties step aside.
+
+The scatterplot below highlights the **"Purple Zone"**: votes where **Abstentions outnumbered Nays**. These are the moments where the conflict was suspended.
 
 ```{r abstention}
-df_abstention <- df_votazioni  |> filter(!is.na(votanti))  |>
-  mutate(behavior = case_when(contrari < 15 & astenuti < 15 ~ "Unanimous", astenuti > contrari & astenuti > 20 ~ "Strategic Abstention", TRUE ~ "Conflict"))
+# 1. Data Preparation: defining Voting Behavior
+df_abstention <- df_votazioni |> 
+  # Filter out rows with missing voting data
+  filter(!is.na(votanti)) |>
+  
+  mutate(
+    behavior = case_when(
+      # Case A: Unanimous / Technical
+      # Both Opposition (Nays) and Abstentions are negligible. The Chamber agrees.
+      contrari < 15 & astenuti < 15 ~ "Unanimous",
+      
+      # Case B: Strategic Abstention (The "Purple Zone")
+      # If Abstentions are higher than Nays (and significant in number),
+      # the opposition is deliberately choosing not to fight.
+      astenuti > contrari & astenuti > 20 ~ "Strategic Abstention",
+      
+      # Case C: Standard Conflict
+      # The default state where Opposition votes No.
+      TRUE ~ "Conflict"
+    )
+  )
 
+# 2. Visualization
 ggplot(df_abstention, aes(x = contrari, y = astenuti, color = behavior)) +
-  geom_jitter(alpha = 0.6) +
-  geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
-  scale_color_manual(values = c("Conflict"="#CCCCCC", "Unanimous"="#2E8B57", "Strategic Abstention"="#800080")) +
-  theme_minimal() + theme(legend.position = "top") +
-  labs(title = "Strategic Abstention", subtitle = "Purple: Abstentions > Nays", x = "Votes Against", y = "Abstentions")
+  
+  # Use Jitter (random noise) to separate overlapping points (discrete integer values)
+  geom_jitter(alpha = 0.6, width = 1, height = 1) +
+  
+  # The "Boundary Line" (Slope = 1)
+  # Points ABOVE this line mean Abstentions > Nays
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "grey50") +
+  
+  # Custom Colors
+  scale_color_manual(values = c(
+    "Conflict" = "#CCCCCC",             # Grey: Background noise (Normal politics)
+    "Unanimous" = "#2E8B57",            # Green: Total Agreement
+    "Strategic Abstention" = "#800080"  # Purple: The tactical area
+  )) +
+  
+  # Theme Adjustments
+  theme_minimal() + 
+  theme(legend.position = "top") +
+  
+  # Final Labels
+  labs(
+    title = "Strategic Abstention", 
+    subtitle = "Purple dots indicate votes where the Opposition preferred Abstaining over voting 'No'", 
+    x = "Votes Against (Nays)", 
+    y = "Abstentions",
+    color = "Vote Dynamics"
+  )
 ```
 
-### Anatomy of Conflict: Final Votes vs Amendments
+### Anatomy of Conflict: Final Votes vs Amendments: The Moment of Truth
 
-Do they fight on details but agree on the final law? The data suggests the opposite. The "Final Vote" (Red) is where the discipline kicks in and the conflict is sharpest. The Amendments (Grey) are where the chaos happens.
+Legislative activity is divided into two distinct phases: the discussion of **Amendments** (modifications to the text) and the **Final Vote** (passage of the law).
+
+The visual comparison below is striking:
+
+* **Amendments (Grey):** This scatterplot mirrors the chaos of the general "Geometry of Consensus" (99% similarity). It is a dispersed cloud of **guerrilla warfare**, where the battle is technical, confused, and sometimes cross-party.
+* **Final Votes (Red):** Here, the picture sharpens immediately. The ambiguity disappears, and **almost all laws pass**. The dots condense into two specific winning zones:
+    1.  **Unanimity:** Broad institutional agreement (top-left corner).
+    2.  **Majority Force:** The coalition lines up to push political laws through (top-center).
+
+When the final roll call is summoned, the skirmishes end, and the result is decisive.
 
 ```{r final_vs_amendments}
-df_final <- df_votazioni  |> filter(votanti > 50)  |>
-  mutate(vote_type = ifelse(replace_na(as.numeric(votazioneFinale),0)==1, "Final Vote (Law)", "Amendment"))
+# 1. Data Preparation: Distinguish Final Laws from Amendments
+df_final <- df_votazioni |> 
+  # Filter out minor votes to keep the analysis relevant
+  filter(votanti > 50) |>
+  
+  mutate(
+    vote_type = ifelse(
+      # 'votazioneFinale' is a flag (1 = Yes, 0/NA = No). 
+      # We treat NAs as 0 (not a final vote).
+      replace_na(as.numeric(votazioneFinale), 0) == 1, 
+      "Final Vote (Law Passage)", 
+      "Amendment / Procedural"
+    )
+  )
 
+# 2. Visualization
 ggplot(df_final, aes(x = contrari, y = favorevoli, color = vote_type)) +
-  geom_point(alpha = 0.5) + facet_wrap(~ vote_type) +
-  scale_color_manual(values = c("Amendment"="#999999", "Final Vote (Law)"="#D55E00")) +
-  theme_minimal() + theme(legend.position = "none") +
-  labs(title = "Conflict: Amendments vs Final Laws", x = "Votes Against", y = "Votes in Favor")
+  
+  # Scatter Points
+  geom_point(alpha = 0.5) + 
+  
+  # Facet Wrap: Split the chart into two side-by-side panels
+  # This allows us to compare the "Shape" of the voting patterns clearly
+  facet_wrap(~ vote_type) +
+  
+  # Custom Colors
+  scale_color_manual(values = c(
+    "Amendment / Procedural" = "#999999",     # Grey: The noise/chaos
+    "Final Vote (Law Passage)" = "#D55E00"    # Red: The distinct political clusters
+  )) +
+  
+  # Theme Adjustments
+  theme_minimal() + 
+  theme(legend.position = "none") +
+  
+  # Final Labels
+  labs(
+    title = "Anatomy of Conflict", 
+    subtitle = "Amendments (Chaos) vs Final Laws (Discipline)", 
+    x = "Votes Against (Opposition)", 
+    y = "Votes in Favor (Majority)"
+  )
 ```

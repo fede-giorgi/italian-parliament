@@ -191,12 +191,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-weekly-rhythm" id="toc-the-weekly-rhythm" class="nav-link" data-scroll-target="#the-weekly-rhythm"><span class="header-section-number">3.2.1</span> The Weekly Rhythm</a></li>
   <li><a href="#here-is-the-revised-seasonality-section." id="toc-here-is-the-revised-seasonality-section." class="nav-link" data-scroll-target="#here-is-the-revised-seasonality-section."><span class="header-section-number">3.2.2</span> Here is the revised Seasonality section.</a></li>
   </ul></li>
-  <li><a href="#story-iii-the-geometry-of-consensus" id="toc-story-iii-the-geometry-of-consensus" class="nav-link" data-scroll-target="#story-iii-the-geometry-of-consensus"><span class="header-section-number">4</span> 3. Story III: The Geometry of Consensus</a>
+  <li><a href="#the-geometry-of-consensus" id="toc-the-geometry-of-consensus" class="nav-link" data-scroll-target="#the-geometry-of-consensus"><span class="header-section-number">4</span> 3. The Geometry of Consensus</a>
   <ul class="collapse">
-  <li><a href="#the-stability-test" id="toc-the-stability-test" class="nav-link" data-scroll-target="#the-stability-test"><span class="header-section-number">4.0.1</span> The Stability Test</a></li>
-  <li><a href="#polarization-vs.-consensus" id="toc-polarization-vs.-consensus" class="nav-link" data-scroll-target="#polarization-vs.-consensus"><span class="header-section-number">4.0.2</span> Polarization vs.&nbsp;Consensus</a></li>
-  <li><a href="#strategic-abstention" id="toc-strategic-abstention" class="nav-link" data-scroll-target="#strategic-abstention"><span class="header-section-number">4.0.3</span> Strategic Abstention</a></li>
-  <li><a href="#anatomy-of-conflict-final-votes-vs-amendments" id="toc-anatomy-of-conflict-final-votes-vs-amendments" class="nav-link" data-scroll-target="#anatomy-of-conflict-final-votes-vs-amendments"><span class="header-section-number">4.0.4</span> Anatomy of Conflict: Final Votes vs Amendments</a></li>
+  <li><a href="#the-stability-test-measuring-government-muscle" id="toc-the-stability-test-measuring-government-muscle" class="nav-link" data-scroll-target="#the-stability-test-measuring-government-muscle"><span class="header-section-number">4.0.1</span> The Stability Test: Measuring Government Muscle</a></li>
+  <li><a href="#polarization-vs.-consensus-the-three-clusters" id="toc-polarization-vs.-consensus-the-three-clusters" class="nav-link" data-scroll-target="#polarization-vs.-consensus-the-three-clusters"><span class="header-section-number">4.0.2</span> Polarization vs.&nbsp;Consensus: The Three Clusters</a></li>
+  <li><a href="#strategic-abstention-the-art-of-non-belligerence" id="toc-strategic-abstention-the-art-of-non-belligerence" class="nav-link" data-scroll-target="#strategic-abstention-the-art-of-non-belligerence"><span class="header-section-number">4.0.3</span> Strategic Abstention: The Art of Non-Belligerence</a></li>
+  <li><a href="#anatomy-of-conflict-final-votes-vs-amendments-the-moment-of-truth" id="toc-anatomy-of-conflict-final-votes-vs-amendments-the-moment-of-truth" class="nav-link" data-scroll-target="#anatomy-of-conflict-final-votes-vs-amendments-the-moment-of-truth"><span class="header-section-number">4.0.4</span> Anatomy of Conflict: Final Votes vs Amendments: The Moment of Truth</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -798,23 +798,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="story-iii-the-geometry-of-consensus" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> 3. Story III: The Geometry of Consensus</h1>
+<section id="the-geometry-of-consensus" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> 3. The Geometry of Consensus</h1>
 <p>Is the parliament paralyzed by polarization? Or is there hidden cooperation?</p>
-<section id="the-stability-test" class="level3" data-number="4.0.1">
-<h3 data-number="4.0.1" class="anchored" data-anchor-id="the-stability-test"><span class="header-section-number">4.0.1</span> The Stability Test</h3>
-<p>The Blue Line represents the government’s strength. If it stays above the Red Line (201 votes), the majority is safe. The trend shows a stable government, immune to the “snipers” that plagued previous legislatures.</p>
+<section id="the-stability-test-measuring-government-muscle" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="the-stability-test-measuring-government-muscle"><span class="header-section-number">4.0.1</span> The Stability Test: Measuring Government Muscle</h3>
+<p>Does the solid majority on paper translate into actual voting power? To test this, we analyzed the trend of <strong>approved motions</strong> over time, isolating only the moments when the Government successfully pushed legislation through.</p>
+<p>The data tells a nuanced story. While the trend line shows a <strong>slight physiological decline</strong>—typical as the initial “honeymoon period” fades and routine sets in—it floats comfortably above the <strong>absolute majority threshold (201 seats)</strong>. This indicates a coalition that may experience minor erosion but maintains a safe safety margin, avoiding the cliff-edge scenarios of previous unstable legislatures.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_votazioni  <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">ymd</span>(date))  <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(date), votanti <span class="sc">&gt;</span> <span class="dv">100</span>)  <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> favorevoli)) <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">color =</span> <span class="st">"grey60"</span>) <span class="sc">+</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">color =</span> <span class="st">"#003366"</span>, <span class="at">fill =</span> <span class="st">"#ADD8E6"</span>, <span class="at">span =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">201</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Government Stability Trend"</span>, <span class="at">subtitle =</span> <span class="st">"Votes in Favor over time (Red line = Absolute Majority)"</span>, <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Votes in Favor"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_votazioni <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">ymd</span>(date)) <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter for meaningful votes (Quorum &gt; 100)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(date), votanti <span class="sc">&gt;</span> <span class="dv">100</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(favorevoli <span class="sc">&gt;</span> contrari) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> favorevoli)) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Scatter points (Low opacity to show density)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">color =</span> <span class="st">"grey60"</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Trend Line (LOESS)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">color =</span> <span class="st">"#003366"</span>, <span class="at">fill =</span> <span class="st">"#ADD8E6"</span>, <span class="at">span =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Reference Threshold</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">201</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Annotations</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fu">min</span>(<span class="fu">ymd</span>(df_votazioni<span class="sc">$</span>date), <span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="at">y =</span> <span class="dv">190</span>, </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Majority Threshold (201)"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Government Strength Trend"</span>, </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of 'Votes in Favor' for passed legislation (Trend vs Threshold)"</span>, </span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>, </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Votes in Favor"</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -825,21 +846,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="polarization-vs.-consensus" class="level3" data-number="4.0.2">
-<h3 data-number="4.0.2" class="anchored" data-anchor-id="polarization-vs.-consensus"><span class="header-section-number">4.0.2</span> Polarization vs.&nbsp;Consensus</h3>
-<p>This scatterplot reveals the truth. While the “Blue Cloud” in the center shows political conflict, the cluster of green points in the top-left corner (Zero Nays) proves that <strong>many laws pass with broad consensus</strong>. It is not always a war.</p>
+<section id="polarization-vs.-consensus-the-three-clusters" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="polarization-vs.-consensus-the-three-clusters"><span class="header-section-number">4.0.2</span> Polarization vs.&nbsp;Consensus: The Three Clusters</h3>
+<p>If one were to judge Italian politics solely by talk shows, the conclusion would be one of perpetual chaos. However, mapping the votes reveals a precise <strong>Geometry of Power</strong> composed of three distinct behaviors.</p>
+<p>This scatterplot maps every vote based on “Nays” (X-axis) vs “Ayes” (Y-axis). The data clusters into three logical zones:</p>
+<ul>
+<li><strong>The Green Corner (Institutional Peace):</strong> Top-left. Hundreds of votes with near-zero opposition. These are technical ratifications where the Chamber acts as a unified body.</li>
+<li><strong>The Blue Cloud (Majority Advance):</strong> Top-center. The Government passes its laws. The opposition fights (voting against), but the majority numbers hold firm.</li>
+<li><strong>The Red Zone (Majority Barrier):</strong> Bottom-right. This area, dense with “Nays”, represents <strong>Minority proposals rejected by the Majority</strong>. It is not the Government losing; it is the Government flexing its muscles to block Opposition amendments.</li>
+</ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_vote_analysis <span class="ot">&lt;-</span> df_votazioni  <span class="sc">|&gt;</span> <span class="fu">filter</span>(votanti <span class="sc">&gt;</span> <span class="dv">50</span>)  <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outcome =</span> <span class="fu">case_when</span>(contrari <span class="sc">&lt;</span> <span class="dv">20</span> <span class="sc">~</span> <span class="st">"Unanimous"</span>, favorevoli <span class="sc">&gt;</span> contrari <span class="sc">~</span> <span class="st">"Majority Won"</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Opposition Won"</span>))</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_vote_analysis, <span class="fu">aes</span>(<span class="at">x =</span> contrari, <span class="at">y =</span> favorevoli, <span class="at">color =</span> outcome)) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Unanimous"</span><span class="ot">=</span><span class="st">"#2E8B57"</span>, <span class="st">"Majority Won"</span><span class="ot">=</span><span class="st">"#4682B4"</span>, <span class="st">"Opposition Won"</span><span class="ot">=</span><span class="st">"#CD5C5C"</span>)) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The Geometry of Consensus"</span>, <span class="at">x =</span> <span class="st">"Votes Against"</span>, <span class="at">y =</span> <span class="st">"Votes In Favor"</span>, <span class="at">color =</span> <span class="st">"Outcome"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Data Classification</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df_vote_analysis <span class="ot">&lt;-</span> df_votazioni <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(votanti <span class="sc">&gt;</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">outcome =</span> <span class="fu">case_when</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Case A: Unanimous (Peace)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Very few votes against (&lt; 20) indicate broad consensus</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      contrari <span class="sc">&lt;</span> <span class="dv">20</span> <span class="sc">~</span> <span class="st">"Unanimous / Technical"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Case B: Majority Approved (Govt Wins)</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="co"># The motion passes. This represents Govt laws overcoming opposition.</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      favorevoli <span class="sc">&gt;</span> contrari <span class="sc">~</span> <span class="st">"Majority Approved"</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Case C: Minority Rejected (Govt Blocks)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># The motion fails (Nays &gt; Ayes). </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># In a stable legislature, these are overwhelmingly Opposition proposals voted down by the Majority.</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Minority Proposal Rejected"</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Visualization</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_vote_analysis, <span class="fu">aes</span>(<span class="at">x =</span> contrari, <span class="at">y =</span> favorevoli, <span class="at">color =</span> outcome)) <span class="sc">+</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Scatter Points</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The "Tie" Line (x = y)</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Points below this line are rejected motions. Points above are approved.</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Colors reflecting the logic</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Unanimous / Technical"</span> <span class="ot">=</span> <span class="st">"#2E8B57"</span>,    <span class="co"># Green: Harmony</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Majority Approved"</span> <span class="ot">=</span> <span class="st">"#4682B4"</span>,        <span class="co"># Blue: Govt Constructive Power</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Minority Proposal Rejected"</span> <span class="ot">=</span> <span class="st">"#CD5C5C"</span> <span class="co"># Red: Govt Blocking Power</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final Labels</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"The Geometry of Consensus &amp; Conflict"</span>, </span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Analysis of Parliamentary dynamics: Approval, Rejection, and Unanimity"</span>, </span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Votes Against (Nays)"</span>, </span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Votes In Favor (Ayes)"</span>, </span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Vote Dynamics"</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -850,21 +915,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="strategic-abstention" class="level3" data-number="4.0.3">
-<h3 data-number="4.0.3" class="anchored" data-anchor-id="strategic-abstention"><span class="header-section-number">4.0.3</span> Strategic Abstention</h3>
-<p>The “Purple Zone”. These dots represent moments where the opposition decided not to vote “No”, but to abstain. This is the empirical evidence of compromise: letting a law pass without officially supporting it.</p>
+<section id="strategic-abstention-the-art-of-non-belligerence" class="level3" data-number="4.0.3">
+<h3 data-number="4.0.3" class="anchored" data-anchor-id="strategic-abstention-the-art-of-non-belligerence"><span class="header-section-number">4.0.3</span> Strategic Abstention: The Art of Non-Belligerence</h3>
+<p>In a binary world of “Ayes” and “Nays,” abstention is a powerful political signal. It is the “Third Way.” When the opposition abstains en masse, they are effectively saying: <em>“We do not support this law, but we will not stop it.”</em></p>
+<p>This usually happens in two scenarios:</p>
+<ul>
+<li><strong>Tactical Agreements:</strong> The government accepts an opposition amendment in exchange for a “soft” vote (abstention instead of rejection).</li>
+<li><strong>Shared Responsibility:</strong> On sensitive topics (foreign policy, ethical issues), voting against might be unpopular, so parties step aside.</li>
+</ul>
+<p>The scatterplot below highlights the <strong>“Purple Zone”</strong>: votes where <strong>Abstentions outnumbered Nays</strong>. These are the moments where the conflict was suspended.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_abstention <span class="ot">&lt;-</span> df_votazioni  <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(votanti))  <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">behavior =</span> <span class="fu">case_when</span>(contrari <span class="sc">&lt;</span> <span class="dv">15</span> <span class="sc">&amp;</span> astenuti <span class="sc">&lt;</span> <span class="dv">15</span> <span class="sc">~</span> <span class="st">"Unanimous"</span>, astenuti <span class="sc">&gt;</span> contrari <span class="sc">&amp;</span> astenuti <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">~</span> <span class="st">"Strategic Abstention"</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Conflict"</span>))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_abstention, <span class="fu">aes</span>(<span class="at">x =</span> contrari, <span class="at">y =</span> astenuti, <span class="at">color =</span> behavior)) <span class="sc">+</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Conflict"</span><span class="ot">=</span><span class="st">"#CCCCCC"</span>, <span class="st">"Unanimous"</span><span class="ot">=</span><span class="st">"#2E8B57"</span>, <span class="st">"Strategic Abstention"</span><span class="ot">=</span><span class="st">"#800080"</span>)) <span class="sc">+</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>) <span class="sc">+</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Strategic Abstention"</span>, <span class="at">subtitle =</span> <span class="st">"Purple: Abstentions &gt; Nays"</span>, <span class="at">x =</span> <span class="st">"Votes Against"</span>, <span class="at">y =</span> <span class="st">"Abstentions"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Data Preparation: defining Voting Behavior</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_abstention <span class="ot">&lt;-</span> df_votazioni <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter out rows with missing voting data</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(votanti)) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">behavior =</span> <span class="fu">case_when</span>(</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Case A: Unanimous / Technical</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Both Opposition (Nays) and Abstentions are negligible. The Chamber agrees.</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>      contrari <span class="sc">&lt;</span> <span class="dv">15</span> <span class="sc">&amp;</span> astenuti <span class="sc">&lt;</span> <span class="dv">15</span> <span class="sc">~</span> <span class="st">"Unanimous"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Case B: Strategic Abstention (The "Purple Zone")</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># If Abstentions are higher than Nays (and significant in number),</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>      <span class="co"># the opposition is deliberately choosing not to fight.</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>      astenuti <span class="sc">&gt;</span> contrari <span class="sc">&amp;</span> astenuti <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">~</span> <span class="st">"Strategic Abstention"</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Case C: Standard Conflict</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>      <span class="co"># The default state where Opposition votes No.</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Conflict"</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Visualization</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_abstention, <span class="fu">aes</span>(<span class="at">x =</span> contrari, <span class="at">y =</span> astenuti, <span class="at">color =</span> behavior)) <span class="sc">+</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use Jitter (random noise) to separate overlapping points (discrete integer values)</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">height =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The "Boundary Line" (Slope = 1)</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Points ABOVE this line mean Abstentions &gt; Nays</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Custom Colors</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Conflict"</span> <span class="ot">=</span> <span class="st">"#CCCCCC"</span>,             <span class="co"># Grey: Background noise (Normal politics)</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Unanimous"</span> <span class="ot">=</span> <span class="st">"#2E8B57"</span>,            <span class="co"># Green: Total Agreement</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Strategic Abstention"</span> <span class="ot">=</span> <span class="st">"#800080"</span>  <span class="co"># Purple: The tactical area</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Theme Adjustments</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>) <span class="sc">+</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final Labels</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Strategic Abstention"</span>, </span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Purple dots indicate votes where the Opposition preferred Abstaining over voting 'No'"</span>, </span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Votes Against (Nays)"</span>, </span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Abstentions"</span>,</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Vote Dynamics"</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -875,20 +988,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="anatomy-of-conflict-final-votes-vs-amendments" class="level3" data-number="4.0.4">
-<h3 data-number="4.0.4" class="anchored" data-anchor-id="anatomy-of-conflict-final-votes-vs-amendments"><span class="header-section-number">4.0.4</span> Anatomy of Conflict: Final Votes vs Amendments</h3>
-<p>Do they fight on details but agree on the final law? The data suggests the opposite. The “Final Vote” (Red) is where the discipline kicks in and the conflict is sharpest. The Amendments (Grey) are where the chaos happens.</p>
+<section id="anatomy-of-conflict-final-votes-vs-amendments-the-moment-of-truth" class="level3" data-number="4.0.4">
+<h3 data-number="4.0.4" class="anchored" data-anchor-id="anatomy-of-conflict-final-votes-vs-amendments-the-moment-of-truth"><span class="header-section-number">4.0.4</span> Anatomy of Conflict: Final Votes vs Amendments: The Moment of Truth</h3>
+<p>Legislative activity is divided into two distinct phases: the discussion of <strong>Amendments</strong> (modifications to the text) and the <strong>Final Vote</strong> (passage of the law).</p>
+<p>The visual comparison below is striking:</p>
+<ul>
+<li><strong>Amendments (Grey):</strong> This scatterplot mirrors the chaos of the general “Geometry of Consensus” (99% similarity). It is a dispersed cloud of <strong>guerrilla warfare</strong>, where the battle is technical, confused, and sometimes cross-party.</li>
+<li><strong>Final Votes (Red):</strong> Here, the picture sharpens immediately. The ambiguity disappears, and <strong>almost all laws pass</strong>. The dots condense into two specific winning zones:
+<ol type="1">
+<li><strong>Unanimity:</strong> Broad institutional agreement (top-left corner).</li>
+<li><strong>Majority Force:</strong> The coalition lines up to push political laws through (top-center).</li>
+</ol></li>
+</ul>
+<p>When the final roll call is summoned, the skirmishes end, and the result is decisive.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_final <span class="ot">&lt;-</span> df_votazioni  <span class="sc">|&gt;</span> <span class="fu">filter</span>(votanti <span class="sc">&gt;</span> <span class="dv">50</span>)  <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vote_type =</span> <span class="fu">ifelse</span>(<span class="fu">replace_na</span>(<span class="fu">as.numeric</span>(votazioneFinale),<span class="dv">0</span>)<span class="sc">==</span><span class="dv">1</span>, <span class="st">"Final Vote (Law)"</span>, <span class="st">"Amendment"</span>))</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_final, <span class="fu">aes</span>(<span class="at">x =</span> contrari, <span class="at">y =</span> favorevoli, <span class="at">color =</span> vote_type)) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span> vote_type) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Amendment"</span><span class="ot">=</span><span class="st">"#999999"</span>, <span class="st">"Final Vote (Law)"</span><span class="ot">=</span><span class="st">"#D55E00"</span>)) <span class="sc">+</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Conflict: Amendments vs Final Laws"</span>, <span class="at">x =</span> <span class="st">"Votes Against"</span>, <span class="at">y =</span> <span class="st">"Votes in Favor"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Data Preparation: Distinguish Final Laws from Amendments</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_final <span class="ot">&lt;-</span> df_votazioni <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter out minor votes to keep the analysis relevant</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(votanti <span class="sc">&gt;</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">vote_type =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>      <span class="co"># 'votazioneFinale' is a flag (1 = Yes, 0/NA = No). </span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># We treat NAs as 0 (not a final vote).</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">replace_na</span>(<span class="fu">as.numeric</span>(votazioneFinale), <span class="dv">0</span>) <span class="sc">==</span> <span class="dv">1</span>, </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Final Vote (Law Passage)"</span>, </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Amendment / Procedural"</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Visualization</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_final, <span class="fu">aes</span>(<span class="at">x =</span> contrari, <span class="at">y =</span> favorevoli, <span class="at">color =</span> vote_type)) <span class="sc">+</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Scatter Points</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Facet Wrap: Split the chart into two side-by-side panels</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This allows us to compare the "Shape" of the voting patterns clearly</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> vote_type) <span class="sc">+</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Custom Colors</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Amendment / Procedural"</span> <span class="ot">=</span> <span class="st">"#999999"</span>,     <span class="co"># Grey: The noise/chaos</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Final Vote (Law Passage)"</span> <span class="ot">=</span> <span class="st">"#D55E00"</span>    <span class="co"># Red: The distinct political clusters</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Theme Adjustments</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final Labels</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Anatomy of Conflict"</span>, </span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Amendments (Chaos) vs Final Laws (Discipline)"</span>, </span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Votes Against (Opposition)"</span>, </span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Votes in Favor (Majority)"</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>

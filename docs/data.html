@@ -146,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
   <li><a href="#structure-and-dimensions" id="toc-structure-and-dimensions" class="nav-link" data-scroll-target="#structure-and-dimensions"><span class="header-section-number">2.2</span> Structure and Dimensions</a></li>
-  <li><a href="#data-quality-and-limitations" id="toc-data-quality-and-limitations" class="nav-link" data-scroll-target="#data-quality-and-limitations"><span class="header-section-number">2.3</span> Data Quality and Limitations</a></li>
+  <li><a href="#data-quality-and-challenges" id="toc-data-quality-and-challenges" class="nav-link" data-scroll-target="#data-quality-and-challenges"><span class="header-section-number">2.3</span> Data Quality and Challenges</a></li>
   <li><a href="#access" id="toc-access" class="nav-link" data-scroll-target="#access"><span class="header-section-number">2.4</span> Access</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -175,34 +175,27 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
-<p>This project relies on the official Linked Open Data (LOD) repository maintained by the <strong>Camera dei Deputati (Chamber of Deputies)</strong>. Unlike static archival datasets, this repository functions as a living digital archive of the Italian Republic, updated continuously to reflect parliamentary activity in real-time.</p>
-<p>The analysis focuses specifically on the XIX Legislature, which commenced on October 13, 2022. This period represents a significant break in the recent history of Italian political instability, characterized by a clear electoral winner and a defined parliamentary majority.</p>
+<p>This project relies on the official <strong>Linked Open Data (LOD)</strong> repository maintained by the <strong>Camera dei Deputati (Chamber of Deputies)</strong>. Unlike static archival datasets, this repository functions as a living digital archive of the Italian Republic, updated continuously to reflect parliamentary activity in real-time.</p>
+<p>The analysis focuses specifically on the <strong>XIX Legislature</strong>, which commenced on October 13, 2022. This period represents a significant break in the recent history of Italian political instability, characterized by a clear electoral winner and a defined parliamentary majority.</p>
 </section>
 <section id="structure-and-dimensions" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="structure-and-dimensions"><span class="header-section-number">2.2</span> Structure and Dimensions</h2>
-<p>Unlike the flat, wide-format CSV files common in political science research, the primary source data is structured as a <strong>semantic graph (RDF/XML)</strong>. To make this complex web of relationships accessible for quantitative analysis, the data has been parsed and flattened into four distinct, relational dataframes using the R statistical environment:</p>
+<p>Unlike the flat, wide-format CSV files common in political science research, the primary source data is structured as a <strong>semantic graph (RDF/XML)</strong>. To make this complex web of relationships accessible for quantitative analysis, the data has been parsed and flattened into five distinct, relational dataframes using the R statistical environment:</p>
 <ul>
-<li><p><code>Votazioni (votazione-19.rdf)</code>: The core dataset containing the outcomes of parliamentary votes. It includes metadata on the subject of the vote (e.g., amendments, confidence votes), the type of voting procedure (electronic, secret ballot), and the aggregate tallies (Present, Voting, Ayes, Nays, Abstentions).</p></li>
-<li><p><code>Sedute (seduta-19.rdf)</code>: The “calendar” of the Chamber. This dataset links every vote to a specific session date and type (Assembly vs.&nbsp;Committee), providing the temporal backbone necessary to analyze the rhythm of legislative work.</p></li>
-<li><p><code>Deputati (deputato-19.rdf)</code>: The demographic registry of the 400 elected officials. It contains personal attributes such as gender, age, profession, and education level, allowing for a sociological profiling of the ruling class.</p></li>
-<li><p><code>Elezioni (elezione-19.rdf)</code>: The geographic link. This file connects individual deputies to their specific electoral colleges and constituencies, enabling spatial analysis of representation across the Italian peninsula.</p></li>
+<li><strong><code>votazione-19.rdf</code> (Votes):</strong> The core dataset containing the outcomes of parliamentary votes. It includes metadata on the subject of the vote (e.g., amendments, confidence votes) and the aggregate tallies (Present, Voting, Ayes, Nays, Abstentions).</li>
+<li><strong><code>seduta-19.rdf</code> (Sessions):</strong> The “calendar” of the Chamber. This dataset links every vote to a specific session date, providing the temporal backbone necessary to analyze the rhythm of legislative work (Story II).</li>
+<li><strong><code>deputato-19.rdf</code> (Deputies):</strong> The demographic registry of the 400 elected officials. It contains personal attributes such as gender, age, profession, and education level, allowing for the sociological profiling of the ruling class (Story I).</li>
+<li><strong><code>elezione-19.rdf</code> (Elections):</strong> The geographic link. This file connects individual deputies to their specific electoral colleges and constituencies, enabling the spatial analysis of representation across the North-South divide.</li>
+<li><strong><code>gruppoParlamentare-19.rdf</code> (Groups):</strong> A reference dictionary that maps internal group codes to the official names of Parliamentary Groups (Parties), essential for decoding political affiliations.</li>
 </ul>
 </section>
-<section id="data-quality-and-limitations" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="data-quality-and-limitations"><span class="header-section-number">2.3</span> Data Quality and Limitations</h2>
-<p>The transition from Semantic Web standards (triplets) to tabular data presents specific <strong>challenges</strong>. A preliminary review confirms that while the numerical data (vote counts) is robust and complete, the categorical metadata requires significant harmonization.</p>
-<p>Specifically, the “Missing Data Analysis” reveals a structural limitation regarding Parliamentary Groups (parties). In the raw RDF structure, party affiliation is often referenced via “Blank Nodes” or links to external datasets (organo.rdf) not included in this specific snapshot. Consequently, while we can track the behavior of individual deputies with high precision, mapping them to their specific political parties requires inferential matching or supplementary data collection.</p>
-<p>Furthermore, the dataset distinguishes between the theoretical composition of the Chamber and the active workforce. Resignations, substitutions (subentri), and deaths create a fluctuating number of active IDs, which must be normalized to avoid skewing attendance metrics.</p>
+<section id="data-quality-and-challenges" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="data-quality-and-challenges"><span class="header-section-number">2.3</span> Data Quality and Challenges</h2>
+<p>The transition from Semantic Web standards (triplets) to tabular data presents specific challenges. A preliminary review confirmed that while the numerical data (vote counts) is robust, the categorical metadata required significant harmonization.</p>
 </section>
 <section id="access" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="access"><span class="header-section-number">2.4</span> Access</h2>
-<p>The data is publicly available through the dati.camera.it portal under an Open Data license (CC-BY 4.0), ensuring transparency and reproducibility. While the Chamber provides the raw RDF dumps, the parsing algorithms used to transform these triplets into the R dataframes used in this study are original to this project.</p>
-<p>The datasets analyzed are sourced from the following official endpoints:</p>
-<ul>
-<li><p>Votazioni: XIX Legislature Voting Records (RDF/XML)</p></li>
-<li><p>Deputati: Registry of Elected Officials (RDF/XML)</p></li>
-<li><p>Sedute: Calendar of Parliamentary Sessions (RDF/XML)</p></li>
-</ul>
+<p>The data is publicly available through the <a href="http://dati.camera.it/it/">dati.camera.it</a> portal under an Open Data license (CC-BY 4.0), ensuring transparency and reproducibility. While the Chamber provides the raw RDF dumps, the parsing algorithms used to transform these triplets into the R dataframes used in this study are original to this project.</p>
 
 
 </section>
