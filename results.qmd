@@ -2,7 +2,7 @@
 
 The following section loads the necessary R libraries for data manipulation and visualization, and executes the parsing of the raw Linked Open Data (RDF) provided by the Chamber of Deputies, transforming the semantic triplets into structured relational datasets.
 
-```{r}
+```{r setting}
 # --- 1. LIBRARIES ---
 # Loading essential packages for data manipulation (tidyverse) and dates (lubridate)
 library(tidyverse)
@@ -163,7 +163,7 @@ This outcome was amplified by the "Rosatellum" electoral law, a complex mixed sy
 
 Does this translate into a solid command of the Chamber? The data confirms a clear numerical advantage.
 
-```{r}
+```{r chamber_composition}
 # Plotting the Chamber Composition based on the final cleaned dataset
 df_deputati_final |>
   # 1. Count the number of deputies for each party
@@ -362,7 +362,7 @@ While **Fratelli d'Italia (FdI)** acts as a national homogenizer, other forces a
 
 The chart below sorts parties by their presence in the North (Blue), revealing a clear gradient from the Alps to the Islands.
 
-```{r}
+```{r geographic_distribution}
 # 1. Enrich Data with Geography
 df_geo_analysis <- df_deputati_final |>
   # Join with election data to get the 'coverage' (Constituency Name)
@@ -378,8 +378,7 @@ df_geo_analysis <- df_deputati_final |>
       region_raw %in% c("TOSCANA", "UMBRIA", "MARCHE", "LAZIO") ~ "Center",
       region_raw %in% c("ABRUZZO", "MOLISE", "CAMPANIA", "PUGLIA", "BASILICATA", "CALABRIA") ~ "South",
       region_raw %in% c("SICILIA", "SARDEGNA") ~ "Islands",
-      region_raw %in% c("ESTERO") ~ "Abroad",
-      TRUE ~ "North" # Fallback
+      TRUE ~ "Abroad" # Fallback
     )
   )
 
@@ -416,9 +415,15 @@ ggplot(df_geo_analysis, aes(x = party_acronym, fill = macro_area)) +
   # Show Y-axis as percentages
   scale_y_continuous(labels = scales::percent) +
   
-  # Use Red-Blue diverging palette (Blue=North, Red=South)
-  scale_fill_brewer(palette = "RdBu") +
-  
+  # Colors
+  scale_fill_manual(values = c(
+    "North" = "#004B87",   # Deep Blue
+    "Center" = "#C0392B",  # Brick Red
+    "South" = "#F39C12",   # Orange/Gold
+    "Islands" = "#1ABC9C", # Turquoise
+    "Abroad" = "#95A5A6"   # Grey
+  )) +
+
   theme_minimal() + 
   theme(legend.position = "top") +
   
@@ -454,31 +459,39 @@ df_activity <- df_votazioni |>
   # label = TRUE returns text (e.g., "Monday") instead of numbers
   mutate(weekday = wday(date, label = TRUE, abbr = FALSE, week_start = 1))
 
-# 2. Visualization
+# 2. Visualization (Styled to match Seasonality Chart)
 df_activity |> 
   # Count the total number of votes for each weekday
   count(weekday) |>
   
-  ggplot(aes(x = weekday, y = n)) +
+  # group = 1 is necessary to tell ggplot to connect the categorical days with a line
+  ggplot(aes(x = weekday, y = n, group = 1)) +
   
-  # Create the Bar Chart
-  # We use a static fill color (#4682B4 - Steel Blue) for uniformity
-  geom_col(fill = "#4682B4", width = 0.7) +
+  # Area Chart (Background fill)
+  geom_area(fill = "#E6E6FA", alpha = 0.5) +
   
-  # Add labels on top of bars for readability
-  geom_text(aes(label = n), vjust = -0.5, fontface = "bold") +
+  # Line Chart (The Trend)
+  geom_line(color = "#6A5ACD", size = 1.2) +
   
+  # Points (The Markers)
+  geom_point(color = "#483D8B", size = 3) +
+
   # Theme Adjustments
   theme_minimal() + 
   theme(
     panel.grid.major.x = element_blank(), # Remove vertical grid lines
-    axis.text.x = element_text(size = 11, face = "bold")
+    axis.text.x = element_text(size = 11, face = "bold"),
+    # Add a bit of upper margin to fit the text labels
+    plot.margin = margin(t = 10, r = 10, b = 10, l = 10) 
   ) +
+  
+  # Adjust Y scale to make room for labels
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
   
   # Final Labels
   labs(
     title = "Weekly Work Rhythm", 
-    subtitle = "Volume of votes by day of the week", 
+    subtitle = "Volume of votes by day of the week: The Tuesday-Wednesday Peak", 
     x = "", 
     y = "Total Votes Cast"
   )
