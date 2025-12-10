@@ -213,7 +213,7 @@ df_deputati_final |>
 library(sf)
 library(tidyverse)
 # Update this path to your PLURINOMINALI folder
-shapefile_path <- "/Users/dian/italian-parliament/CAMERA_CollegiPLURINOMINALI_2020/CAMERA_CollegiPLURINOMINALI_2020.shp"
+shapefile_path <- "CAMERA_CollegiPLURINOMINALI_2020/CAMERA_CollegiPLURINOMINALI_2020.shp"
 map_pluri <- read_sf(shapefile_path)
 
 # --- 2. CLEAN DATA & FIX REGION NAMES ---
