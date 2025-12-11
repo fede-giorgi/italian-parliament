@@ -179,11 +179,11 @@ ul.task-list li input[type="checkbox"] {
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
 <p>All the data for this project comes from the official <strong>Linked Open Data</strong> repository run by the <strong>Camera dei Deputati</strong>. The data gets updated in real time as Parliament does its work, which means we’re looking at a live picture of legislative activity.</p>
-<p>We focused specifically on the XIX Legislature (started on October 13, 2022) which breaks the pattern of the last several years. There was a clear winner in the election, a stable majority, and for once the government wasn’t cobbled together from five different parties that cannot agree on legislatures. That makes it a useful case study for understanding how the Parliament behaves when it’s not constantly fighting.</p>
+<p>We focused specifically on the XIX Legislature (started on October 13, 2022) which breaks the pattern of the last several years: there is a clear winner in the election, a stable majority, and the government is not mingled together from five different parties that cannot agree on legislatures. That makes it a useful case study for understanding how the Parliament behaves when it’s not constantly fighting.</p>
 </section>
 <section id="structure-and-dimensions" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="structure-and-dimensions"><span class="header-section-number">2.2</span> Structure and Dimensions</h2>
-<p>The raw data isn’t structured, and comes as a semantic graph in <strong>RDF/XML</strong> format, which is essentially a web of relationships between entities rather than rows and columns. To actually work with it, we had to parse everything and flatten it into five separate dataframes using R:</p>
+<p>The raw data isn’t structured, and comes as a semantic graph in <strong>RDF/XML</strong> format, which is a web of relationships between entities, not like a usual csv file. To work with it, we had to parse and flatten data into five separate dataframes using R:</p>
 <ul>
 <li><strong><code>votazione-19.rdf</code> (Votes):</strong> The core dataset that contains the outcomes of parliamentary votes like metadata on the subjects (amendments, confidence votes etc.) and the aggregate tallies (Present, Voting, Ayes, Nays, Abstentions).</li>
 <li><strong><code>seduta-19.rdf</code> (Sessions):</strong> The “calendar” of the Chamber which links every vote to a specific date, providing the temporal data to analyze the time of legislative work (Story II).</li>
@@ -193,17 +193,17 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <section id="missing-data-and-nas" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="missing-data-and-nas"><span class="header-section-number">2.2.1</span> Missing Data and NAs</h3>
-<p>The dataset has distinct categories of missing values (NAs), which are not random errors but reflections of either genuine information gaps or structural features of the Italian electoral system.</p>
+<p>The dataset has distinct categories of missing values (NAs), which are not random errors but it reflects information gaps or features of the Italian electoral system.</p>
 <ul>
-<li><strong>Undeclared Personal Information:</strong> A portion of the NAs in here is because certain disclosures are voluntary. For instance, in the demographic analysis, the missing values in “Education Level” or “Profession” fields are due to deputy choosing not to disclose the details in their official profile.</li>
-<li><strong>Structural NAs:</strong> There are a significant number of missing values in the “Party” field because of the current electoral law (the Rosatellum). It’s a complicated and mixed system where some deputies get elected through proportional representation, where they’re clearly tied to a specific party list, but others win in single-member districts, where they run as part of a coalition rather than a single party. In the raw data, these deputies don’t have a direct party link because they weren’t elected under one party’s banner at that point in time.</li>
-<li><strong>Regional Anomalies (Valle d’Aosta):</strong> The autonomous region of Valle d’Aosta is an autonomous region with a unique electoral system that doesn’t follow the national rules, so the data from there doesn’t fit neatly into the same structure.</li>
+<li><strong>Undeclared Personal Information:</strong> A portion of the NAs in here is because certain disclosures are voluntary. For example, in the demographic analysis, the missing values in “Education Level” or “Profession” fields are due to deputy choosing not to disclose the details in their official profile.</li>
+<li><strong>Structural NAs:</strong> There are a significant number of missing values in the “Party” field because of the current complicated electoral law (the Rosatellum). Some deputies get elected through proportional representation, so they’re clearly tied to a specific party list, but others win in single-member districts, where they run as part of a coalition rather than a single party. In the raw data, these deputies don’t have a direct party link because they weren’t elected under one party’s banner at that point in time.</li>
+<li><strong>Regional Anomalies (Valle d’Aosta):</strong> The region of Valle d’Aosta is an autonomous region with a unique electoral system that doesn’t follow the national rules, so the data from there doesn’t fit neatly into the same structure.</li>
 </ul>
 </section>
 </section>
 <section id="data-quality-and-challenges" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="data-quality-and-challenges"><span class="header-section-number">2.3</span> Data Quality and Challenges</h2>
-<p>Converting the data from RDF format into usable dataframes was the most tedious part of this project. RDF stores everything as triplets, which is useful for representing linked data but doesn’t translate easily into the kind of tables you need for statistical analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.</p>
+<p>Converting the data from RDF format into usable dataframes was the most tedious part of this project. RDF stores everything as triplets, which is useful for representing linked data but doesn’t translate easily into tables you need for analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.</p>
 <p>Another issue was that a lot of fields are just raw strings such as profession and level of education: these often came as free text rather than standardized categories. We spent a fair amount of time cleaning and standardizing these fields before we could do anything useful with them.</p>
 </section>
 <section id="access" class="level2" data-number="2.4">

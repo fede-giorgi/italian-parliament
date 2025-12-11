@@ -130,11 +130,11 @@ First we must understand who they are. Are we looking at the same pool of career
 
 ### The Numbers of Power
 
-The snap elections of **September 25, 2022** produced a clear result that Italy has not seen in a while: the **Center-Right** bloc won a comfortable majority, largely thanks to the rise of *Fratelli d'Italia (FdI)*, which went from being a minor party to the largest force in Parliament in a short time.
+The snap elections of **September 25, 2022** produced a clear result that Italy has not seen in a while: the **Center-Right** bloc won a comfortable majority, largely thanks to the rise of *Fratelli d'Italia (FdI)*, which went from being a minor party to the largest one in Parliament in a short time.
 
-This outcome was amplified by the "Rosatellum" electoral law: out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). These candidates were supported by the entire coalition, and are often grouped by their broader **bloc**, while the remaining were assigned via proportional plurinominal lists.
+This outcome was strenghtened by the "Rosatellum" electoral law: out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). These candidates were supported by the entire coalition, and are often grouped by their broader **bloc**, while the remaining were assigned via proportional plurinominal lists.
 
-But does the electoral victory actually translate into control of the Chamber? The numbers suggest it does.
+But does the electoral victory actually translate into control of the Chamber? The numbers suggest **Yes**.
 
 ```{r chamber_composition}
 df_deputati_final |>
@@ -181,7 +181,7 @@ df_deputati_final |>
 
 There's a tension in Italian politics right now when it comes to gender representation. The country's first female Prime Minister came from the **Right**, not the Left: **Giorgia Meloni** broke through a "Glass ceiling" for females in the political world that many progressive parties have tried for decades but didn't succeed. 
 
-Is this a true paradox? The data below provides a clear answer: **No.**
+Is this a true paradox? The data below provides a answer: **No.**
 
 While the Right produced the national figurehead, **Left and Center-Left parties elect and maintain a significantly higher percentage of women**. Meloni may be the most visible woman in Italian politics, but her own coalition is still predominantly male.
 
@@ -323,9 +323,9 @@ ggplot(df_education_gender, aes(x = party_acronym, fill = education_level)) +
 
 ### Professional Background: The Rise of Career Politicians
 
-One question worth asking is whether Parliament actually reflects the people it represents, at least in terms of professional experience. Some European parliaments are full of former civil servants but Italy's is not.
+One question worth asking is whether Parliament actually reflects the people it represents in terms of professional experience. Some European parliaments have many former civil servants but Italy's does not.
 
-The data highlights a dominance of **Lawyers** and **Professional Politicians**, often categorized under "Other" as they lack an alternative career. Meanwhile, people who work in healthcare, education, or the private sector are notably underrepresented.
+The data highlights a dominance of **Lawyers** and **Professional Politicians**, often categorized under "Other" since they lack an alternative career. Meanwhile, people who work in healthcare, education, or the private sector are underrepresented.
 
 ```{r professions}
 # 1. Enrich Data with Biographical Description
@@ -374,13 +374,13 @@ df_professions |>
 
 ### Political Geography: A Nation of Many Italies
 
-In Italy, politics is as regional as the cuisine. The country is not a uniform block but a mosaic of distinct socio-economic identities, and the voting data confirms a historical fracture.
+In Italy, politics is as regional as the cuisine. The country is like a mosaic of distinct socio-economic identities, and the voting data reflects this distinction.
 
-While **Fratelli d'Italia (FdI)** is like a national "homogenizer", other forces are deeply based in specific areas:
+While **Fratelli d'Italia (FdI)** is a national "homogenizer", other forces are deeply based in specific areas:
 
 * **The North:** This is the stronghold of **Lega** (born as a northern autonomist party) and **SVP** (representing linguistic minorities in South Tyrol).
-* **The Center-North:** The traditional "Red Belt" remains the primary reservoir for the **Democratic Party (PD)**.
-* **The South:** The **Five Star Movement (M5S)** dominates here, channeling the discontent of the economically disadvantaged regions.
+* **The Center-North:** The traditional "Red Belt" that represents the **Democratic Party (PD)**.
+* **The South:** The **Five Star Movement (M5S)** dominates here, where people are often discontent because of the economical disadvantages of this region.
 
 The chart below sorts parties by their presence in the North (Blue), revealing a clear gradient from the Alps to the Islands.
 
@@ -443,14 +443,14 @@ ggplot(df_geo_analysis, aes(x = party_acronym, fill = macro_area)) +
 
 ## The "Short Week" Reality
 
-There is a popular joke in Rome: *Parliament opens on Tuesday and closes on Thursday.* The stereotype depicts deputies as commuters who arrive in the capital on Monday night and rush to the airports by Thursday afternoon.
+There is a popular joke in Rome: *"Parliament opens on Tuesday and closes on Thursday."* The stereotype depicts deputies as commuters who arrive in the capital on Monday night and rush to the airports by Thursday afternoon.
 
-Is this just a myth? The data suggests no.
+Is this just a myth? The data suggests **no**.
 
 ### The Weekly Rhythm
 
 The analysis of voting timestamps confirms the **"Short Week"** is not a myth.
-The legislative machine runs at full speed only on **Tuesdays and Wednesdays**. Mondays and Fridays are phantom days, with almost zero voting activity. The data validates the stereotype: for the average deputy, the parliamentary week effectively lasts 48 to 72 hours.
+The legislative machine runs at full speed only on **Tuesdays and Wednesdays**. Mondays and Fridays are phantom days, with low voting activity. The data validates the stereotype: for the average deputy, the parliamentary week effectively lasts 48 to 72 hours.
 
 ```{r weekly_rhythm}
 # 1. Data Preparation: Extracting Time Components
@@ -530,8 +530,8 @@ We wanted to see who breaks ranks, and when. Is Parliament as polarized as it lo
 
 ### The Stability Test
 
-Does the solid majority on paper translate into actual voting power? 
-To check whether the **Center-Right coalition** can reliably pass legislation, we tracked approved motions over time, looking specifically at votes where the government got the outcome it wanted.
+Does the majority on paper translate into actual voting power? 
+To check whether the **Center-Right coalition** can pass legislation, we tracked approved motions over time, looking specifically at votes where the government got the outcome it wanted.
 
 The results are fairly stable. There's a **slight decline over time**, which is expected as government loses slight momentum after the initial period. But even accounting for that, **the vote counts still stays above 201 seats** needed for a majority for most of the time. 
 
@@ -564,7 +564,7 @@ df_votazioni |>
 
 This scatterplot maps every vote based on "Nays" (x-axis) vs "Ayes" (y-axis). The data clusters into three logical zones:
 
-* **The Green:** A large number of votes pass with almost no opposition. These are mostly technical matters or routine ratifications where there's no real political disagreement.
+* **The Green:** A large number of votes pass with almost no opposition. These are mostly technical or routine matters where there's no real political disagreement.
 * **The Blue:** The Government passes its laws but the opposition fights (voting against them), but the majority numbers still holds.
 * **The Red:**This area is "Nays", which represents **Minority proposals rejected by the Majority**. It is where conflict happens to block opposition amendments.
 
@@ -611,7 +611,7 @@ When the opposition abstains together it's a powerful political move: they are e
 
 This usually happens in two scenarios:
 
-* **Tactical Agreements:** The government accepts an opposition amendment in exchange for the opposition stepping back instead of voting against.
+* **Tactical Agreements:** The government accepts an opposition's amendment in exchange for the opposition to step back instead of voting against.
 * **Shared Responsibility:** On sensitive topics (foreign policy, ethical issues), voting against might be unpopular, so they abstain instead.
 
 The scatterplot below highlights the **"Purple Zone"**: votes where **Abstentions outnumbered Nays**. These are the moments where the conflict was suspended.
@@ -662,7 +662,7 @@ Legislative activity is divided into two distinct phases: the discussion of **Am
 
 The visual comparison below shows voting patterns in those two phases:
 
-* **Amendments (Grey):** This scatterplot mirrors the chaos of the general "Geometry of Consensus" (99% similarity). The distribution is scattered and chaotic, without clear blocs or clean party divisions.
+* **Amendments (Grey):** This scatterplot mirrors the chaos of the general "Geometry of Consensus". The distribution is scattered and chaotic, without clear blocs or clean party divisions.
 * **Final Votes (Red):** The ambiguity disappears here, and **almost all laws pass**. The dots condense into two specific zones:
     1.  **Unanimity:** Broad agreement (top-left corner).
     2.  **Majority Force:** The coalition lines up to push political laws through (top-center).

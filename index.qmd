@@ -6,7 +6,7 @@ As two Italians, we've grown up watching the same cycle play out.
 
 But the current legislature, the XIX, is actually different, and what makes it worth studying is that for the first time, there's a genuine majority in the Chamber of Deputies. Now, instead of asking "will this government make it to next month?", we can actually ask "what is it actually doing?"
 
-And it turns out Parliament generates a lot of data including electronic vote, committee session, and draft bill. So rather than relying on pundit takes and newspaper headlines, we wanted to look at what the numbers actually show and organized our analysis around three questions:
+And it turns out Parliament generates a lot of data including electronic vote, committee session, and draft bill so we wanted to look at what the numbers show and organized our analysis around three questions:
 
 **1. Who's in the room?** The Chamber was reduced to 400 seats this legislature. What does that mean for representation? Is it more women, fewer women? Are Southern regions still underrepresented compared to the North?
 
