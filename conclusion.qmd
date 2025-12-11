@@ -1,13 +1,14 @@
 # Conclusion
 
 While this analysis provides a deep dive into the XIX Legislature, it is more of a structural overview. The current dataset allows us to measure *volume* and *alignment*, we can see the broad patterns, the shape of the coalitions, and how votes tend to cluster. 
+
 But to really understand the finer dynamics of the Italian parliament, we'd need to go deeper with the integration of more detailed and granular data.
 
 Future directions to focus on are:
 
 * **Internal cohesion and defectors (*Franchi Tiratori*):** Our current analysis treats parties as monolithic blocks but political drama often happen within the same party. With access to individual roll-call votes (who voted for what), we could measure **Party Discipline Indices** to identify which groups are most prone to internal conflicts and see who votes against their own coalition in secret ballots.
 * **Party switching(*Cambio di Casacca*):** The current analysis we assigned one party per deputy based on election results or current affiliation. We could track changes in the Deputies' affiliation over time and reveal their political loyalty, and whether the old tradition of *trasformismo*(where politicians drift towards the one in power) still exists.
-* **Conflict Analysis:** We know *how* they vote, but not always *what* they are fighting about. Applying Natural Language Processing (NLP) to the text of amendments and parliamentary debates would allow us to see which topics spark the most conflict.
+* **Conflict Analysis:** Applying Natural Language Processing (NLP) to the text of amendments and parliamentary debates would allow us to see which topics spark the most conflict.
 * **Government vs. Parliament Efficiency:** Finally, a crucial metric that is missing the **Success Rate**. How many bills proposed by MPs actually become law compared to those initiated by the Government? Analyzing the "failure rate" of private member bills versus government decrees would tell us a lot about the real balance of power. 
 
 

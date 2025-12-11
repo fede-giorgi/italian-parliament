@@ -1,10 +1,9 @@
 # Results 
 
-The following section loads the necessary R libraries for data manipulation and visualization, and executes the parsing of the raw Linked Open Data (RDF) provided by the Chamber of Deputies, transforming the semantic triplets into structured relational datasets.
+The following section loads the R libraries, and executes the parsing of the raw Linked Open Data (RDF) provided by the Chamber of Deputies.
 
 ```{r setting}
 # --- 1. LIBRARIES ---
-# Loading essential packages for data manipulation (tidyverse) and dates (lubridate)
 library(tidyverse)
 library(stringr)
 library(lubridate)
@@ -12,17 +11,13 @@ library(ggplot2)
 library(scales)
 
 # --- 2. PARSING FUNCTION ---
-# Custom function to parse the raw RDF/XML files.
-# Since the files are structured as N-Triples, we use Regex to extract Subject, Predicate, and Object.
 read_camera_rdf <- function(file_path) {
   raw_lines <- read_lines(file_path)
   tibble(raw = raw_lines) |>
     filter(raw != "") |> 
-    # Regex extraction of the 3 RDF components
     extract(raw, into = c("soggetto_url", "predicato_url", "oggetto_raw"),
             regex = "^<([^>]+)>\\s+<([^>]+)>\\s+(.+)$", remove = FALSE) |>
     mutate(
-      # Clean IDs and Values
       id = str_extract(soggetto_url, "[^/]+$"),
       variable = str_extract(predicato_url, "[^/#]+$"),
       value = oggetto_raw |> str_remove("\\^\\^.*$") |> str_remove(" \\.$") |> str_remove_all("\"") |> str_trim()
@@ -33,7 +28,6 @@ read_camera_rdf <- function(file_path) {
 # --- 3. LOAD RAW DATASETS ---
 
 # A. VOTING RECORDS (Votazioni)
-# Contains the outcome of every parliamentary vote
 df_votazioni <- read_camera_rdf("data/votazione-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
@@ -41,7 +35,6 @@ df_votazioni <- read_camera_rdf("data/votazione-19.rdf") |>
   mutate(date = ymd(date))
 
 # B. SESSION CALENDAR (Sedute)
-# Links votes to specific dates and session types
 df_sedute <- read_camera_rdf("data/seduta-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
@@ -49,22 +42,18 @@ df_sedute <- read_camera_rdf("data/seduta-19.rdf") |>
   select(id, date, label) |> rename(id_seduta = id)
 
 # C. DEPUTIES REGISTRY (Deputati)
-# Demographic info (Gender, Age, Profession)
 df_deputati <- read_camera_rdf("data/deputato-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
-  # Extract numeric ID (e.g. 307471) ignoring the legislature prefix
   mutate(id_numerico = str_extract(id, "\\d{5,}"))
 
 # D. ELECTION RESULTS (Elezioni)
-# Contains the Electoral List and Constituency for every elected official
 df_elezioni <- read_camera_rdf("data/elezione-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
   mutate(id_numerico = str_extract(id, "\\d{5,}"))
 
 # E. PARLIAMENTARY GROUPS (Dictionary)
-# Maps Group IDs to full Party Names
 df_groups_dict <- read_camera_rdf("data/gruppoParlamentare-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
@@ -73,9 +62,6 @@ df_groups_dict <- read_camera_rdf("data/gruppoParlamentare-19.rdf") |>
   rename(group_name = label)
 
 # --- 4. MASTER DATA PREPARATION (Hybrid Method) ---
-# Goal: Assign a political party to all 400 deputies.
-# Strategy: Use Election Lists as primary source, fallback to Current Office if missing.
-
 # Step 1: Election Source (Primary)
 df_source_election <- df_elezioni |>
   filter(!is.na(lista)) |>
@@ -83,7 +69,6 @@ df_source_election <- df_elezioni |>
   mutate(source = "Election")
 
 # Step 2: Office Source (Fallback)
-# Extracts group code from the Parliamentary Office URL
 df_source_office <- df_deputati |>
   select(id_numerico, rif_ufficioParlamentare) |>
   filter(!is.na(rif_ufficioParlamentare)) |>
@@ -98,15 +83,11 @@ df_source_office <- df_deputati |>
 df_deputati_final <- df_deputati |>
   distinct(id_numerico, .keep_all = TRUE) |>
   select(id, id_numerico) |>
-  # Join Election Data
   left_join(df_source_election, by = "id_numerico") |>
   rename(party_election = raw_party_name) |>
-  # Join Office Data
   left_join(df_source_office, by = "id_numerico") |>
   rename(party_office = raw_party_name) |>
-  # Coalesce: Take Election if available, otherwise Office
   mutate(final_party_raw = coalesce(party_election, party_office)) |>
-  # Map raw strings to clean Acronyms
   mutate(
     party_acronym = case_when(
       is.na(final_party_raw) ~ "First-past-the-post Candidates",
@@ -125,7 +106,6 @@ df_deputati_final <- df_deputati |>
   )
 
 # --- 5. COLOR PALETTE ---
-# Assigning official colors to each party acronym
 party_colors <- c(
   "FdI" = "#003366",  # Dark Blue
   "PD" = "#EF3E36",   # Red
@@ -142,38 +122,32 @@ party_colors <- c(
 ```
 
 
-## 1.The Players (Who Represents Us?)
+## The Players (Who Represents Us?)
 
-The XIX Legislature is the first to operate under the new constitutional rules approved in the 2020 referendum, which cut the Chamber of Deputies from **630 to 400**.
-That's a significant reduction, and it changes the dynamics of the assembly in ways that go beyond just having fewer people in the room. Each vote matters more, each seat is harder to win, and in theory, the bar for getting elected should be higher.
+The XIX Legislature is the first to operate under the new constitutional rules approved in the 2020 referendum, which cut the Chamber of Deputies from **630 to 400**. Now each vote matters more, and each seat is harder to win, so we think the bar for getting elected should be higher.
 
-Before we analyze what they do, we must understand who they are. Are we looking at the same pool of career politicians who have cycled through Italian institutions for decades, or did the smaller chamber attract a different kind of representative? 
+First we must understand who they are. Are we looking at the same pool of career politicians who have cycled through Italian institutions for decades, or did the smaller chamber attract representative with diverse background? Who really are these deputies, and how do they compare to what we might expect from a representative assembly?
 
-Before diving into voting patterns and legislative activity, it makes sense to start with the basics: who are these 400 deputies, and how do they compare to what we might expect from a representative assembly?
+### The Numbers of Power
 
-### 1.1 The Numbers of Power
+The snap elections of **September 25, 2022** produced a clear result that Italy has not seen in a while: the **Center-Right** bloc won a comfortable majority, largely thanks to the rise of *Fratelli d'Italia (FdI)*, which went from being a minor party to the largest force in Parliament in a short time.
 
-The snap elections of **September 25, 2022** produced a clear result that Italy has not seen in a while. After nearly a decade of hung parliaments and awkward coalition deals, the **Center-Right** bloc won a comfortable majority, largely thanks to the rise of *Fratelli d'Italia (FdI)*, which went from being a minor party to the largest force in Parliament almost overnight.
-
-This outcome was amplified by the "Rosatellum" electoral law, a complex mixed system. Out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). These candidates were supported by the entire coalition, and in the voting data, they are often grouped by their broader **bloc** rather than a single list, while the remaining were assigned via proportional plurinominal lists.
+This outcome was amplified by the "Rosatellum" electoral law: out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). These candidates were supported by the entire coalition, and are often grouped by their broader **bloc**, while the remaining were assigned via proportional plurinominal lists.
 
 But does the electoral victory actually translate into control of the Chamber? The numbers suggest it does.
 
 ```{r chamber_composition}
-# Plotting the Chamber Composition based on the final cleaned dataset
 df_deputati_final |>
   # 1. Count the number of deputies for each party
   count(party_acronym, sort = TRUE) |>
   
   # 2. Initialize the plot
-  # Reorder party_acronym based on count 'n' to have the largest bars at the top
   ggplot(aes(x = reorder(party_acronym, n), y = n, fill = party_acronym)) +
   
   # 3. Create the bars
   geom_col(width = 0.7) +
   
   # 4. Add the exact count labels next to the bars
-  # hjust = -0.2 moves the text slightly right of the bar end
   geom_text(aes(label = n), hjust = -0.2, fontface = "bold") +
   
   # 5. Flip coordinates to make horizontal bars (better for reading names)
@@ -203,51 +177,43 @@ df_deputati_final |>
 ```
 
 
-### 1.2 Gender Balance: the Meloni Paradox
+### Gender Balance: the Meloni Paradox
 
-There's a tension in Italian politics right now when it comes to gender representation. The country's first female Prime Minister came from the **Right**, not the Left. **Giorgia Meloni** broke through a barrier that decades of progressive rhetoric about quotas and equality never managed to crack. On the surface, that seems like a contradiction.
+There's a tension in Italian politics right now when it comes to gender representation. The country's first female Prime Minister came from the **Right**, not the Left: **Giorgia Meloni** broke through a "Glass ceiling" for females in the political world that many progressive parties have tried for decades but didn't succeed. 
 
 Is this a true paradox? The data below provides a clear answer: **No.**
 
-While the Right produced the national figurehead, **Left and Center-Left parties elect and maintain a significantly higher percentage of women** than their counterparts on the Right. Meloni may be the most visible woman in Italian politics, but her own coalition remains predominantly male. The structural commitment to gender balance, in terms of who actually gets elected, still sits firmly on the left side of the spectrum.
+While the Right produced the national figurehead, **Left and Center-Left parties elect and maintain a significantly higher percentage of women**. Meloni may be the most visible woman in Italian politics, but her own coalition is still predominantly male.
 
 The chart below visualizes this divide, sorting parties by their percentage of female representatives.
 
 ```{r gender_diverging}
 # 1. Prepare Data with Overall Benchmark
-# We take the final dataset and bring back the gender column
 df_demographics_full <- df_deputati_final |>
   left_join(df_deputati |> select(id_numerico, gender, description), by = "id_numerico")
 
 # 2. Create Plot Dataset (Parties + Overall)
 df_gender_plot <- bind_rows(
-  # Individual Parties
+
   df_demographics_full |> 
     select(party_acronym, gender),
-  
-  # The "Overall" Benchmark (Parliament Average)
+
   df_demographics_full |> 
     mutate(party_acronym = "OVERALL") |> 
     select(party_acronym, gender)
 ) |>
-  # Calculate Percentages
   count(party_acronym, gender) |> 
   group_by(party_acronym) |> 
   mutate(pct = n / sum(n)) |> 
   ungroup() |>
-  # PREPARE FOR DIVERGING CHART:
-  # Make Male percentage negative so bars go Left
-  # Keep Female percentage positive so bars go Right
   mutate(
     plot_pct = ifelse(gender == "male", -pct, pct), 
     label_pct = scales::percent(pct, accuracy = 1)
   )
 
 # 3. Sorting Logic
-# We sort parties based on the percentage of FEMALE representatives (High to Low)
 # A. Calculate Female % for ALL parties (0% for all-male groups)
 df_female_pct <- df_gender_plot |>
-  # Focus only on the percentage of females
   filter(gender == "female") |>
   select(party_acronym, female_pct = pct)
 
@@ -257,12 +223,11 @@ all_parties_list <- unique(df_gender_plot$party_acronym)
 # C. Join and fill NAs with 0
 df_sort_base <- tibble(party_acronym = all_parties_list) |>
   left_join(df_female_pct, by = "party_acronym") |>
-  # CRITICAL: Fill NA percentages (parties with 0 women) with 0
   mutate(female_pct = replace_na(female_pct, 0))
 
 # D. Create the final order vector (sort by the calculated female_pct)
 order_gender <- df_sort_base |>
-  arrange(female_pct) |> # Arranges lowest % female to highest % female
+  arrange(female_pct) |> 
   pull(party_acronym)
 
 # Apply factor order
@@ -271,23 +236,16 @@ df_gender_plot$party_acronym <- factor(df_gender_plot$party_acronym, levels = or
 # 4. Plotting
 ggplot(df_gender_plot, aes(x = party_acronym, y = plot_pct, fill = gender)) +
   geom_col(width = 0.7) +
-  
-  # Labels inside the bars
+
   geom_text(aes(label = label_pct), 
             hjust = ifelse(df_gender_plot$plot_pct > 0, 1.2, -0.2), 
             color = "white", fontface = "bold", size = 3) +
   
   coord_flip() +
-  
-  # Format axis to show positive % on both sides
+
   scale_y_continuous(labels = function(x) scales::percent(abs(x))) +
-  
-  # Colors: Orange/Red for Female, Blue for Male
   scale_fill_manual(values = c("female" = "#D55E00", "male" = "#0072B2")) +
-  
-  # White centerline
   geom_hline(yintercept = 0, color = "white", linewidth = 1) +
-  
   theme_minimal() + 
   theme(
     legend.position = "top", 
@@ -303,13 +261,12 @@ ggplot(df_gender_plot, aes(x = party_acronym, y = plot_pct, fill = gender)) +
     fill = ""
   )
 ```
-### 1.4 Education Gap: Women Need a Higher Bar to Enter Parliament
+### Education Gap: Women Need a Higher Bar to Enter Parliament
 Women are underrepresented in Parliament, but the women who do get elected tend to be more educated than the men. This suggests that women may need stronger credentials just to be considered viable candidates in the first place.
 
 ```{r gender_education}
 # 1. DATA PREPARATION
 df_education_gender <- df_deputati_final |>
-  # Join Deputies Demographic Info (description and gender)
   left_join(df_deputati |> select(id_numerico, gender, description), by = "id_numerico") |>
   filter(party_acronym != "Unknown/Misto") |>
   
@@ -326,22 +283,15 @@ df_education_gender <- df_deputati_final |>
       str_detect(description, regex("Diploma|Maturità|Liceo|Istituto Tecnico", ignore_case = TRUE)) ~ "High School Diploma",
       TRUE ~ "Other / Not Declared"
     ),
-    
-    # 2. Set Factor Levels (Ensuring the order is logical, from Lowest to Highest)
     education_level = factor(education_level_raw, 
                              levels = c("Other / Not Declared", "High School Diploma", "Graduate Degree", "PhD / Doctorate"))
   )
 
 # 2. PLOTTING (FACETED GRID - 2 COLONNE)
 ggplot(df_education_gender, aes(x = party_acronym, fill = education_level)) +
-  
   geom_bar(position = position_fill(reverse = TRUE), width = 0.7) +
-  
   facet_grid(party_acronym ~ gender_label, scales = "free_y", switch = "y") +
-  
   coord_flip() +
-  
-  # Sequential Greens/Teals
   scale_fill_manual(values = c(
     "Other / Not Declared" = "#D9E3D9",
     "High School Diploma" = "#A8D19F",
@@ -371,11 +321,11 @@ ggplot(df_education_gender, aes(x = party_acronym, fill = education_level)) +
 ```
 
 
-### 1.5 Professional Background: The Rise of Career Politicians
+### Professional Background: The Rise of Career Politicians
 
 One question worth asking is whether Parliament actually reflects the people it represents, at least in terms of professional experience. Some European parliaments are full of former civil servants but Italy's is not.
 
-The data highlights a dominance of **Lawyers** and **Professional Politicians**, often categorized under "Other" as they lack an alternative career. Meanwhile, people who work in healthcare, education, or the private sector are notably underrepresented. The result is a legislative body that doesn't look much like the broader workforce it's supposed to serve.
+The data highlights a dominance of **Lawyers** and **Professional Politicians**, often categorized under "Other" as they lack an alternative career. Meanwhile, people who work in healthcare, education, or the private sector are notably underrepresented.
 
 ```{r professions}
 # 1. Enrich Data with Biographical Description
@@ -384,7 +334,6 @@ df_professions <- df_deputati_final |>
   filter(!is.na(description)) |>
   
   # 2. Text Mining to Classify Jobs
-  # We look for keywords in the description field to categorize professions
   mutate(
     job_category = case_when(
       str_detect(description, regex("Avvocato|Legale|Giurista", ignore_case = TRUE)) ~ "Lawyer",
@@ -393,7 +342,6 @@ df_professions <- df_deputati_final |>
       str_detect(description, regex("Giornalista|Pubblicista", ignore_case = TRUE)) ~ "Journalist",
       str_detect(description, regex("Medico|Chirurgo|Sanit", ignore_case = TRUE)) ~ "Doctor/Health",
       str_detect(description, regex("Funzionario|Impiegato|Dirigente", ignore_case = TRUE)) ~ "Civil Servant",
-      # Everything else is likely a career politician or generic description
       TRUE ~ "Other/Politician"
     )
   )
@@ -405,14 +353,9 @@ df_professions |>
   
   ggplot(aes(x = reorder(job_category, n), y = n)) +
   geom_col(fill = "#4682B4", width = 0.7) +
-  
-  # Add labels with count and percentage
   geom_text(aes(label = paste0(n, " (", scales::percent(pct, accuracy=1), ")")), 
             hjust = -0.1, fontface = "bold") +
-  
   coord_flip() + 
-  
-  # Expand axis to fit labels
   scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
   
   theme_minimal() + 
@@ -429,11 +372,11 @@ df_professions |>
   )
 ```
 
-### 1.6 Political Geography: A Nation of Many Italies
+### Political Geography: A Nation of Many Italies
 
 In Italy, politics is as regional as the cuisine. The country is not a uniform block but a mosaic of distinct socio-economic identities, and the voting data confirms a historical fracture.
 
-While **Fratelli d'Italia (FdI)** acts as a national "homogenizer", other forces are deeply rooted in specific territories:
+While **Fratelli d'Italia (FdI)** is like a national "homogenizer", other forces are deeply based in specific areas:
 
 * **The North:** This is the stronghold of **Lega** (born as a northern autonomist party) and **SVP** (representing linguistic minorities in South Tyrol).
 * **The Center-North:** The traditional "Red Belt" remains the primary reservoir for the **Democratic Party (PD)**.
@@ -444,14 +387,10 @@ The chart below sorts parties by their presence in the North (Blue), revealing a
 ```{r geographic_distribution}
 # 1. Enrich Data with Geography
 df_geo_analysis <- df_deputati_final |>
-  # Join with election data to get the 'coverage' (Constituency Name)
   left_join(df_elezioni |> select(id_numerico, coverage), by = "id_numerico") |>
   filter(!is.na(coverage), party_acronym != "Unknown/Misto") |>
   mutate(
-    # Clean Region Name: "LOMBARDIA 1" -> "LOMBARDIA"
     region_raw = str_extract(coverage, "^[A-Z\\s']+") |> str_trim(),
-    
-    # Define Macro-Areas based on Italian conventions
     macro_area = case_when(
       region_raw %in% c("PIEMONTE", "VALLE D'AOSTA", "LOMBARDIA", "TRENTINO", "VENETO", "FRIULI", "LIGURIA", "EMILIA") ~ "North",
       region_raw %in% c("TOSCANA", "UMBRIA", "MARCHE", "LAZIO") ~ "Center",
@@ -462,13 +401,10 @@ df_geo_analysis <- df_deputati_final |>
   )
 
 # 2. Set Factor Order for Legend
-# We want the stack to look logical: From Abroad -> Islands -> South -> Center -> North
 df_geo_analysis$macro_area <- factor(df_geo_analysis$macro_area, 
                                      levels = c("Abroad", "Islands", "South", "Center", "North"))
 
 # 3. Calculate Sorting Order
-# We want to sort parties by how "Northern" they are.
-# Parties with the highest % of MPs from the North will appear at the top.
 north_order <- df_geo_analysis |> 
   count(party_acronym, macro_area) |> 
   group_by(party_acronym) |> 
@@ -476,25 +412,15 @@ north_order <- df_geo_analysis |>
   filter(macro_area == "North") |> 
   arrange(pct) |> 
   pull(party_acronym)
-
-# Handle parties that might have 0 MPs in the North (add them to the start of the list)
 final_order <- c(setdiff(unique(df_geo_analysis$party_acronym), north_order), north_order)
 
-# Apply the factor order to the party column
 df_geo_analysis$party_acronym <- factor(df_geo_analysis$party_acronym, levels = final_order)
 
 # 4. Plotting
 ggplot(df_geo_analysis, aes(x = party_acronym, fill = macro_area)) +
-  
-  # Stacked Bar Chart normalized to 100% (position = "fill")
   geom_bar(position = "fill", width = 0.7) +
-  
   coord_flip() +
-  
-  # Show Y-axis as percentages
   scale_y_continuous(labels = scales::percent) +
-  
-  # Colors
   scale_fill_manual(values = c(
     "North" = "#004B87",   # Deep Blue
     "Center" = "#C0392B",  # Brick Red
@@ -515,58 +441,40 @@ ggplot(df_geo_analysis, aes(x = party_acronym, fill = macro_area)) +
   )
 ```
 
-## 2. The "Short Week" Reality
+## The "Short Week" Reality
 
-There is a popular and often malicious saying in Rome: *Parliament opens on Tuesday and closes on Thursday.* The stereotype depicts deputies as commuters who arrive in the capital on Monday night and rush to the airports by Thursday afternoon.
+There is a popular joke in Rome: *Parliament opens on Tuesday and closes on Thursday.* The stereotype depicts deputies as commuters who arrive in the capital on Monday night and rush to the airports by Thursday afternoon.
 
-Is this just a populist myth? The data suggests otherwise.
+Is this just a myth? The data suggests no.
 
-### 2.1 The Weekly Rhythm
+### The Weekly Rhythm
 
-The analysis of voting timestamps confirms the **"Short Week"** is not a myth; it is the operating system of the Chamber.
+The analysis of voting timestamps confirms the **"Short Week"** is not a myth.
 The legislative machine runs at full speed only on **Tuesdays and Wednesdays**. Mondays and Fridays are phantom days, with almost zero voting activity. The data validates the stereotype: for the average deputy, the parliamentary week effectively lasts 48 to 72 hours.
 
 ```{r weekly_rhythm}
 # 1. Data Preparation: Extracting Time Components
 df_activity <- df_votazioni |>
-  # Convert the date string (YYYYMMDD) into a proper Date object
   mutate(date = ymd(date)) |>
-  # Remove rows with missing dates
   filter(!is.na(date)) |>
-  # Extract the Day of the Week (Mon, Tue, Wed...)
-  # label = TRUE returns text (e.g., "Monday") instead of numbers
   mutate(weekday = wday(date, label = TRUE, abbr = FALSE, week_start = 1))
 
 # 2. Visualization (Styled to match Seasonality Chart)
 df_activity |> 
-  # Count the total number of votes for each weekday
   count(weekday) |>
-  
-  # group = 1 is necessary to tell ggplot to connect the categorical days with a line
   ggplot(aes(x = weekday, y = n, group = 1)) +
-  
-  # Area Chart (Background fill)
   geom_area(fill = "#E6E6FA", alpha = 0.5) +
-  
-  # Line Chart (The Trend)
   geom_line(color = "#6A5ACD", size = 1.2) +
-  
-  # Points (The Markers)
   geom_point(color = "#483D8B", size = 3) +
 
-  # Theme Adjustments
   theme_minimal() + 
   theme(
-    panel.grid.major.x = element_blank(), # Remove vertical grid lines
+    panel.grid.major.x = element_blank(), 
     axis.text.x = element_text(size = 11, face = "bold"),
-    # Add a bit of upper margin to fit the text labels
     plot.margin = margin(t = 10, r = 10, b = 10, l = 10) 
   ) +
-  
-  # Adjust Y scale to make room for labels
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
-  
-  # Final Labels
+
   labs(
     title = "Weekly Work Rhythm", 
     subtitle = "Volume of votes by day of the week: The Tuesday-Wednesday Peak", 
@@ -575,51 +483,37 @@ df_activity |>
   )
 ```
 
-### 2.2 Summer Vacation
+### Summer Vacation
 
 Parliamentary activity is strictly dictated by the calendar of holidays. 
 
-August is essentially a break month. The Chamber shuts down for summer vacation and voting activity drops to almost zero. But the month before that, in July, there's a noticeable spike as deputies rush to clear as much as possible before the break. You see a similar pattern around Easter in April, with a smaller peak in March as work ramps up beforehand.
+August is a vacation month. The Chamber shuts down for summer vacation and voting activity drops drastically. But the month before that, in July, there's a noticeable spike as deputies rush to do as much as possible before the break. You see a similar pattern around Easter in April, with a smaller peak in March as work ramps up beforehand.
 
-Another pattern is observed in December, which is intense in workload because of the annual Budget Law deadline. 
+Another pattern is observed in December, which is intense in workload because of the annual Budget Law deadline.
 
 The result is a legislature that operates in bursts: **long stretches of low activity followed by frantic voting as a deadline or a holiday approaches.**
 
 ```{r seasonality}
 # 1. Data Preparation
 df_votazioni |>
-  # Convert string dates to Date objects
   mutate(date = ymd(date)) |> 
-  # Filter out rows with invalid/missing dates
   filter(!is.na(date)) |> 
-  # Extract the full month name (e.g., "January", "February")
   mutate(month_label = month(date, label = TRUE, abbr = FALSE)) |>
   
   # 2. Aggregation
-  # Count total votes per month across the legislature
   count(month_label) |>
   
   # 3. Visualization
-  # group = 1 is necessary to tell ggplot to treat the categorical months as a continuous line
   ggplot(aes(x = month_label, y = n, group = 1)) +
-  
-  # Area Chart (Background fill for visual weight)
   geom_area(fill = "#E6E6FA", alpha = 0.5) + 
-  
-  # Line Chart (To show the trend clearly)
   geom_line(color = "#6A5ACD", size = 1.2) + 
-  
-  # Points (To highlight specific monthly values)
   geom_point(color = "#483D8B", size = 3) +
-  
-  # Theme Adjustments
+
   theme_minimal() + 
   theme(
-    # Rotate x-axis labels by 45 degrees to prevent overlapping
     axis.text.x = element_text(angle = 45, hjust = 1)
   ) +
-  
-  # Final Labels
+
   labs(
     title = "Parliamentary Seasonality", 
     subtitle = "Total votes cast by Month: The July Sprint vs. The August Void", 
@@ -628,38 +522,32 @@ df_votazioni |>
   )
 ```
 
-# 3. The Geometry of Consensus
+# The Geometry of Consensus
 
 Coalition partners are supposed to vote together, and the opposition is supposed to oppose. But how clean is the reality? Do parties actually vote as blocs, or is there more crossover than the political rhetoric suggests?
 
-We wanted to see who breaks ranks, and when. Is Parliament as polarized as it looks on TV, or is there cooperation happening under the surface that doesn't make the headlines?
+We wanted to see who breaks ranks, and when. Is Parliament as polarized as it looks on TV, or is there cooperation happening?
 
-### 3.1 The Stability Test: Measuring Government Muscle
+### The Stability Test
 
 Does the solid majority on paper translate into actual voting power? 
 To check whether the **Center-Right coalition** can reliably pass legislation, we tracked approved motions over time, looking specifically at votes where the government got the outcome it wanted.
 
-The results are fairly stable. There's a slight decline over time, which is expected as government **loses slight momentum after the initial period** when discipline is tight. But even accounting for that, **the vote counts stay well above the 201-seat threshold** needed for an absolute majority. This isn't a coalition scraping by on razor-thin margins. There's enough of a buffer that losing a few votes doesn't cause the legislature to be unstable, unlike previous governments.
+The results are fairly stable. There's a **slight decline over time**, which is expected as government loses slight momentum after the initial period. But even accounting for that, **the vote counts still stays above 201 seats** needed for a majority for most of the time. 
+
+This suggests that there's enough of a buffer that losing a few votes doesn't cause the legislature to be unstable, unlike previous governments.
 
 ```{r stability}
 df_votazioni |>
   mutate(date = ymd(date)) |> 
-  # Filter for meaningful votes (Quorum > 100)
   filter(!is.na(date), votanti > 100) |>
   filter(favorevoli > contrari) |>
   
   ggplot(aes(x = date, y = favorevoli)) +
-  
-  # Scatter points (Low opacity to show density)
   geom_point(alpha = 0.1, color = "grey60") +
-  
-  # Trend Line (LOESS)
   geom_smooth(method = "loess", color = "#003366", fill = "#ADD8E6", span = 0.3) +
-  
-  # Reference Threshold
   geom_hline(yintercept = 201, linetype = "dashed", color = "red", size = 1) +
-  
-  # Annotations
+ 
   annotate("text", x = min(ymd(df_votazioni$date), na.rm=TRUE), y = 190, 
            label = "Majority Threshold (201)", color = "red", hjust = 0, vjust = 1, size = 3.5) +
   
@@ -672,15 +560,13 @@ df_votazioni |>
   )
 ```
 
-### 3.2 Polarization vs. Consensus: The Three Clusters
+### Polarization vs. Consensus
 
-If you judge Italian politics based on talk shows, you'd assume Parliament is in a constant state of chaos. However, mapping the votes reveals a **Geometry of Power** composed of three distinct patterns of behaviors.
+This scatterplot maps every vote based on "Nays" (x-axis) vs "Ayes" (y-axis). The data clusters into three logical zones:
 
-This scatterplot maps every vote based on "Nays" (X-axis) vs "Ayes" (Y-axis). The data clusters into three logical zones:
-
-* **The Green Corner (Institutional Peace):** Top-left. A large number of votes pass with almost no opposition at all. These are mostly technical matters or routine ratifications where there's no real political disagreement, and the Chamber votes as a single body.
-* **The Blue Cloud (Majority Advance):** Top-center. The Government passes its laws. The opposition fights (voting against), but the majority numbers hold firm.
-* **The Red Zone (Majority Barrier):** Bottom-right. This area, dense with "Nays", represents **Minority proposals rejected by the Majority**. It is not the Government losing votes but rather flexing its muscles to block Opposition amendments.
+* **The Green:** A large number of votes pass with almost no opposition. These are mostly technical matters or routine ratifications where there's no real political disagreement.
+* **The Blue:** The Government passes its laws but the opposition fights (voting against them), but the majority numbers still holds.
+* **The Red:**This area is "Nays", which represents **Minority proposals rejected by the Majority**. It is where conflict happens to block opposition amendments.
 
 ```{r scatter_consensus}
 # 1. Data Classification
@@ -688,32 +574,20 @@ df_vote_analysis <- df_votazioni |>
   filter(votanti > 50) |>
   mutate(
     outcome = case_when(
-      # Case A: Unanimous (Peace)
-      # Very few votes against (< 20) indicate broad consensus
       contrari < 20 ~ "Unanimous / Technical",
       
       # Case B: Majority Approved (Govt Wins)
-      # The motion passes. This represents Govt laws overcoming opposition.
       favorevoli > contrari ~ "Majority Approved",
       
       # Case C: Minority Rejected (Govt Blocks)
-      # The motion fails (Nays > Ayes). 
-      # In a stable legislature, these are overwhelmingly Opposition proposals voted down by the Majority.
       TRUE ~ "Minority Proposal Rejected"
     )
   )
 
 # 2. Visualization
 ggplot(df_vote_analysis, aes(x = contrari, y = favorevoli, color = outcome)) +
-  
-  # Scatter Points
   geom_point(alpha = 0.6) +
-  
-  # The "Tie" Line (x = y)
-  # Points below this line are rejected motions. Points above are approved.
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "grey50") +
-  
-  # Colors reflecting the logic
   scale_color_manual(values = c(
     "Unanimous / Technical" = "#2E8B57",    # Green: Harmony
     "Majority Approved" = "#4682B4",        # Blue: Govt Constructive Power
@@ -721,8 +595,7 @@ ggplot(df_vote_analysis, aes(x = contrari, y = favorevoli, color = outcome)) +
   )) +
   
   theme_minimal() +
-  
-  # Final Labels
+
   labs(
     title = "The Geometry of Consensus & Conflict", 
     subtitle = "Analysis of Parliamentary dynamics: Approval, Rejection, and Unanimity", 
@@ -732,63 +605,48 @@ ggplot(df_vote_analysis, aes(x = contrari, y = favorevoli, color = outcome)) +
   )
 ```
 
-### 3.3 Strategic Abstention: The Art of Non-Belligerence
+### Strategic Abstention
 
-In a system built around "Ayes" and "Nays," abstention is a powerful political move.
-When the opposition abstains together, they are effectively saying: *"We do not support this law, but we will not stop it."*
+When the opposition abstains together it's a powerful political move: they are effectively not support this law, but also not stop it.
 
 This usually happens in two scenarios:
 
 * **Tactical Agreements:** The government accepts an opposition amendment in exchange for the opposition stepping back instead of voting against.
-* **Shared Responsibility:** On sensitive topics (foreign policy, ethical issues), voting against might be unpopular, so parties step aside.
+* **Shared Responsibility:** On sensitive topics (foreign policy, ethical issues), voting against might be unpopular, so they abstain instead.
 
 The scatterplot below highlights the **"Purple Zone"**: votes where **Abstentions outnumbered Nays**. These are the moments where the conflict was suspended.
 
 ```{r abstention}
 # 1. Data Preparation: defining Voting Behavior
 df_abstention <- df_votazioni |> 
-  # Filter out rows with missing voting data
   filter(!is.na(votanti)) |>
   
   mutate(
     behavior = case_when(
       # Case A: Unanimous / Technical
-      # Both Opposition (Nays) and Abstentions are negligible. The Chamber agrees.
       contrari < 15 & astenuti < 15 ~ "Unanimous",
       
       # Case B: Strategic Abstention (The "Purple Zone")
-      # If Abstentions are higher than Nays (and significant in number),
-      # the opposition is deliberately choosing not to fight.
       astenuti > contrari & astenuti > 20 ~ "Strategic Abstention",
       
       # Case C: Standard Conflict
-      # The default state where Opposition votes No.
       TRUE ~ "Conflict"
     )
   )
 
 # 2. Visualization
 ggplot(df_abstention, aes(x = contrari, y = astenuti, color = behavior)) +
-  
-  # Use Jitter (random noise) to separate overlapping points (discrete integer values)
   geom_jitter(alpha = 0.6, width = 1, height = 1) +
-  
-  # The "Boundary Line" (Slope = 1)
-  # Points ABOVE this line mean Abstentions > Nays
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "grey50") +
-  
-  # Custom Colors
   scale_color_manual(values = c(
     "Conflict" = "#CCCCCC",             # Grey: Background noise (Normal politics)
     "Unanimous" = "#2E8B57",            # Green: Total Agreement
     "Strategic Abstention" = "#800080"  # Purple: The tactical area
   )) +
   
-  # Theme Adjustments
   theme_minimal() + 
   theme(legend.position = "top") +
-  
-  # Final Labels
+
   labs(
     title = "Strategic Abstention", 
     subtitle = "Purple dots indicate votes where the Opposition preferred Abstaining over voting 'No'", 
@@ -798,15 +656,15 @@ ggplot(df_abstention, aes(x = contrari, y = astenuti, color = behavior)) +
   )
 ```
 
-### 3.4 Anatomy of Conflict: Final Votes vs Amendments: The Moment of Truth
+### Final Votes vs Amendments
 
 Legislative activity is divided into two distinct phases: the discussion of **Amendments** (modifications to the text) and the **Final Vote** (passage of the law).
 
 The visual comparison below shows voting patterns in those two phases:
 
 * **Amendments (Grey):** This scatterplot mirrors the chaos of the general "Geometry of Consensus" (99% similarity). The distribution is scattered and chaotic, without clear blocs or clean party divisions.
-* **Final Votes (Red):** Here, the picture is sharper. The ambiguity disappears, and **almost all laws pass**. The dots condense into two specific winning zones:
-    1.  **Unanimity:** Broad institutional agreement (top-left corner).
+* **Final Votes (Red):** The ambiguity disappears here, and **almost all laws pass**. The dots condense into two specific zones:
+    1.  **Unanimity:** Broad agreement (top-left corner).
     2.  **Majority Force:** The coalition lines up to push political laws through (top-center).
 
 When it comes to the final roll call, we don't see any more fighting, and the result is more clean-cut.
@@ -814,13 +672,10 @@ When it comes to the final roll call, we don't see any more fighting, and the re
 ```{r final_vs_amendments}
 # 1. Data Preparation: Distinguish Final Laws from Amendments
 df_final <- df_votazioni |> 
-  # Filter out minor votes to keep the analysis relevant
   filter(votanti > 50) |>
   
   mutate(
     vote_type = ifelse(
-      # 'votazioneFinale' is a flag (1 = Yes, 0/NA = No). 
-      # We treat NAs as 0 (not a final vote).
       replace_na(as.numeric(votazioneFinale), 0) == 1, 
       "Final Vote (Law Passage)", 
       "Amendment / Procedural"
@@ -829,25 +684,15 @@ df_final <- df_votazioni |>
 
 # 2. Visualization
 ggplot(df_final, aes(x = contrari, y = favorevoli, color = vote_type)) +
-  
-  # Scatter Points
   geom_point(alpha = 0.5) + 
-  
-  # Facet Wrap: Split the chart into two side-by-side panels
-  # This allows us to compare the "Shape" of the voting patterns clearly
   facet_wrap(~ vote_type) +
-  
-  # Custom Colors
   scale_color_manual(values = c(
-    "Amendment / Procedural" = "#999999",     # Grey: The noise/chaos
-    "Final Vote (Law Passage)" = "#D55E00"    # Red: The distinct political clusters
+    "Amendment / Procedural" = "#999999",     
+    "Final Vote (Law Passage)" = "#D55E00"    
   )) +
-  
-  # Theme Adjustments
   theme_minimal() + 
   theme(legend.position = "none") +
-  
-  # Final Labels
+
   labs(
     title = "Anatomy of Conflict", 
     subtitle = "Amendments (Chaos) vs Final Laws (Discipline)", 

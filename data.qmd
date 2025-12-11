@@ -2,34 +2,34 @@
 
 ## Description
 
-All the data for this project comes from the official **Linked Open Data** repository run by the **Camera dei Deputati**. The data gets updated in real time as Parliament does its work, which means we're looking at a live picture of legislative activity rather than a historical snapshot.
+All the data for this project comes from the official **Linked Open Data** repository run by the **Camera dei Deputati**. The data gets updated in real time as Parliament does its work, which means we're looking at a live picture of legislative activity.
 
-We focused specifically on the XIX Legislature, which started on October 13, 2022. This legislature is interesting because it breaks the pattern of the last several years. There was a clear winner in the election, a stable majority, and for once the government wasn't cobbled together from five different parties that barely agree on legislatures. That makes it a useful case study for understanding how Parliament behaves when it's not in constant survival mode.
+We focused specifically on the XIX Legislature (started on October 13, 2022) which breaks the pattern of the last several years. There was a clear winner in the election, a stable majority, and for once the government wasn't cobbled together from five different parties that cannot agree on legislatures. That makes it a useful case study for understanding how the Parliament behaves when it's not constantly fighting.
 
 ## Structure and Dimensions
 
-The raw data isn't structured like the spreadsheets you'd normally see in political science research. Instead, it comes as a semantic graph in **RDF/XML** format, which is essentially a web of relationships between entities rather than rows and columns. To actually work with it, we had to parse everything and flatten it into five separate dataframes using R:
+The raw data isn't structured, and comes as a semantic graph in **RDF/XML** format, which is essentially a web of relationships between entities rather than rows and columns. To actually work with it, we had to parse everything and flatten it into five separate dataframes using R:
 
--   **`votazione-19.rdf` (Votes):** The core dataset containing the outcomes of parliamentary votes. It includes metadata on the subject of the vote (e.g., amendments, confidence votes) and the aggregate tallies (Present, Voting, Ayes, Nays, Abstentions).
--   **`seduta-19.rdf` (Sessions):** The "calendar" of the Chamber. This dataset links every vote to a specific session date, providing the temporal backbone necessary to analyze the rhythm of legislative work (Story II).
--   **`deputato-19.rdf` (Deputies):** The demographic registry of the 400 elected officials. It contains personal attributes such as gender, age, profession, and education level, allowing for the sociological profiling of the ruling class (Story I).
--   **`elezione-19.rdf` (Elections):** The geographic link. This file connects individual deputies to their specific electoral colleges and constituencies, enabling the spatial analysis of representation across the North-South divide.
--   **`gruppoParlamentare-19.rdf` (Groups):** A reference dictionary that maps internal group codes to the official names of Parliamentary Groups (Parties), essential for decoding political affiliations.
+-   **`votazione-19.rdf` (Votes):** The core dataset that contains the outcomes of parliamentary votes like metadata on the subjects (amendments, confidence votes etc.) and the aggregate tallies (Present, Voting, Ayes, Nays, Abstentions).
+-   **`seduta-19.rdf` (Sessions):** The "calendar" of the Chamber which links every vote to a specific date, providing the temporal data to analyze the time of legislative work (Story II).
+-   **`deputato-19.rdf` (Deputies):** The demographic registry of the 400 elected officials. It contains personal attributes such as gender, age, profession, and education levels (Story I).
+-   **`elezione-19.rdf` (Elections):** it links individual deputies to their specific electoral colleges and constituencies, used for the spatial analysis across the North-South of Italy
+-   **`gruppoParlamentare-19.rdf` (Groups):** A reference dictionary that maps internal group codes to the official names of Parliamentary Groups (Parties)
 
 ### Missing Data and NAs
 
 The dataset has distinct categories of missing values (NAs), which are not random errors but reflections of either genuine information gaps or structural features of the Italian electoral system.
 
-* **Undeclared Personal Information:** A portion of the NAs is because of voluntary nature of certain disclosures. For instance, in the demographic analysis, missing values in the "Education Level" or "Profession" fields occur when a deputy chooses not to publicly declare these details in their official profile.
-* **Structural NAs (First-Past-the-Post Candidates):** A significant number of missing values in the "Party" field come from how Italian elections work. The current electoral law (the Rosatellum) is a mixed system.: some deputies get elected through proportional representation, where they're clearly tied to a specific party list; others win in single-member districts, where they run as part of a coalition rather than a single party. In the raw data, these deputies don't have a direct party link because they weren't elected under one party's banner at that point in time.
-* **Regional Anomalies (Valle d'Aosta):** The autonomous region of Valle d'Aosta is an autonomous region with a unique electoral system that doesn't follow the national rules, so the data from there doesn't always fit neatly into the same structure as everywhere else.
+* **Undeclared Personal Information:** A portion of the NAs in here is because certain disclosures are voluntary. For instance, in the demographic analysis, the missing values in "Education Level" or "Profession" fields are due to deputy choosing not to disclose the details in their official profile.
+* **Structural NAs:** There are a significant number of missing values in the "Party" field because of the current electoral law (the Rosatellum). It's a complicated and mixed system where some deputies get elected through proportional representation, where they're clearly tied to a specific party list, but others win in single-member districts, where they run as part of a coalition rather than a single party. In the raw data, these deputies don't have a direct party link because they weren't elected under one party's banner at that point in time.
+* **Regional Anomalies (Valle d'Aosta):** The autonomous region of Valle d'Aosta is an autonomous region with a unique electoral system that doesn't follow the national rules, so the data from there doesn't fit neatly into the same structure.
 
 ## Data Quality and Challenges
 
-Converting the data from RDF format into usable dataframes was the most tedious part of this project. RDF stores everything as triplets (subject-predicate-object relationships), which is useful for representing linked data but doesn't translate easily into the kind of tables you need for statistical analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.
+Converting the data from RDF format into usable dataframes was the most tedious part of this project. RDF stores everything as triplets, which is useful for representing linked data but doesn't translate easily into the kind of tables you need for statistical analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.
 
 Another issue was that a lot of fields are just raw strings such as profession and level of education: these often came as free text rather than standardized categories. We spent a fair amount of time cleaning and standardizing these fields before we could do anything useful with them.
 
 ## Access
 
-The data is publicly available through the [dati.camera.it](http://dati.camera.it/it/) portal under an Open Data license (CC-BY 4.0). While the Chamber provides the raw RDF dumps, the parsing algorithms used to transform these triplets into the R dataframes used in this study are original to this project.
+The data is publicly available through the [dati.camera.it](http://dati.camera.it/it/) portal under an Open Data license (CC-BY 4.0). While the Chamber provides the raw RDF dumps, we transformed these triplets into R dataframes manually.

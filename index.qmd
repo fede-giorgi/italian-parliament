@@ -1,13 +1,12 @@
 # Introduction
 
-To anyone watching from abroad, Italian politics probably looks like chaos. Prime Ministers come and go, technocrats get called in to clean up the mess, and governments collapse before they've really had a chance to do anything. Since 1946, Italy has burned through nearly 70 different governments, which works out to one every 13 months or so.
+To anyone watching from abroad, Italian politics probably looks like chaos. Since 1946, Italy has burned through nearly 70 different governments, which works out to one every 13 months or so. The system was built after Mussolini to make sure no one could grab too much power, but it has caused decades of fragile coalitions and political conflicts.
 
-For us, as two Italians, this isn't some abstract fact. It's just how things work. The system was built after Mussolini to make sure no one could grab too much power, but the trade-off has been decades of fragile coalitions and political gridlock. We've grown up watching the same cycle play out: the consultations at the Quirinale, the confidence votes, coalitions breaking apart and reforming with slightly different names.
+As two Italians, we've grown up watching the same cycle play out. 
 
-But the current legislature, the XIX, is actually different, and that's what makes it worth studying. For the first time in a while, there's a genuine majority in the Chamber of Deputies. Now, instead of asking "will this government make it to next month?", we can finally ask "what is it actually doing?"
+But the current legislature, the XIX, is actually different, and what makes it worth studying is that for the first time, there's a genuine majority in the Chamber of Deputies. Now, instead of asking "will this government make it to next month?", we can actually ask "what is it actually doing?"
 
-And it turns out Parliament generates a lot of data. Every electronic vote, committee session, and draft bill is recorded. So rather than relying on pundit takes and newspaper headlines, we wanted to look at what the numbers actually show.
-We've organized our analysis around three questions:
+And it turns out Parliament generates a lot of data including electronic vote, committee session, and draft bill. So rather than relying on pundit takes and newspaper headlines, we wanted to look at what the numbers actually show and organized our analysis around three questions:
 
 **1. Who's in the room?** The Chamber was reduced to 400 seats this legislature. What does that mean for representation? Is it more women, fewer women? Are Southern regions still underrepresented compared to the North?
 
