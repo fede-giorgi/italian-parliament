@@ -142,22 +142,22 @@ party_colors <- c(
 ```
 
 
-## The Players (Who Represents Us?)
+## 1.The Players (Who Represents Us?)
 
-The XIX Legislature represents a watershed moment in the history of the Italian Republic. Following the constitutional referendum of 2020, the number of seats in the Chamber of Deputies has been drastically cut from **630 to 400**.
+The XIX Legislature is the first to operate under the new constitutional rules approved in the 2020 referendum, which cut the Chamber of Deputies from **630 to 400**.
+That's a significant reduction, and it changes the dynamics of the assembly in ways that go beyond just having fewer people in the room. Each vote matters more, each seat is harder to win, and in theory, the bar for getting elected should be higher.
 
-This smaller, leaner assembly is no longer just a crowd; it is a selected cohort where every single vote carries more weight than ever before. But who are these 400 individuals chosen to represent a nation of 60 million? Are they the usual career politicians, or has the reduction of seats created a new breed of representative?
+Before we analyze what they do, we must understand who they are. Are we looking at the same pool of career politicians who have cycled through Italian institutions for decades, or did the smaller chamber attract a different kind of representative? 
 
-Before we analyze what they do, we must understand who they are. Let's debunk the myths about the people sitting in Montecitorio.
+Before diving into voting patterns and legislative activity, it makes sense to start with the basics: who are these 400 deputies, and how do they compare to what we might expect from a representative assembly?
 
-### The Numbers of Power
+### 1.1 The Numbers of Power
 
-The snap elections of **September 25, 2022**, delivered a decisive verdict, ending a decade of hung parliaments. The vote handed a sweeping majority to the **Center-Right coalition**, driven by the unprecedented rise of *Fratelli d'Italia* (FdI), which established itself as the leading political force.
+The snap elections of **September 25, 2022** produced a clear result that Italy has not seen in a while. After nearly a decade of hung parliaments and awkward coalition deals, the **Center-Right** bloc won a comfortable majority, largely thanks to the rise of *Fratelli d'Italia (FdI)*, which went from being a minor party to the largest force in Parliament almost overnight.
 
 This outcome was amplified by the "Rosatellum" electoral law, a complex mixed system. Out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). These candidates were supported by the entire coalition, and in the voting data, they are often grouped by their broader **bloc** rather than a single list, while the remaining were assigned via proportional plurinominal lists.
 
-Does this translate into a solid command of the Chamber? The data confirms a clear numerical advantage.
-
+But does the electoral victory actually translate into control of the Chamber? The numbers suggest it does.
 
 ```{r chamber_composition}
 # Plotting the Chamber Composition based on the final cleaned dataset
@@ -203,13 +203,13 @@ df_deputati_final |>
 ```
 
 
-### Gender Balance: the Meloni Paradix
+### 1.2 Gender Balance: the Meloni Paradox
 
-Italy faces a fascinating contradiction. The ultimate "glass ceiling" was broken by the **Right**, with **Giorgia Meloni** becoming the first female Prime Minister in the Republic's history. This historical achievement came despite the fact that political battles for gender quotas and structural equality have traditionally been hallmarks of the **Left**.
+There's a tension in Italian politics right now when it comes to gender representation. The country's first female Prime Minister came from the **Right**, not the Left. **Giorgia Meloni** broke through a barrier that decades of progressive rhetoric about quotas and equality never managed to crack. On the surface, that seems like a contradiction.
 
 Is this a true paradox? The data below provides a clear answer: **No.**
 
-While the Right produced the national figurehead, **Left and Center-Left parties structurally elect and maintain a significantly higher percentage of women** within their own ranks, keeping their internal composition much closer to the overall parliamentary average. The structural commitment to gender balance remains clearly stronger on the left side of the political spectrum.
+While the Right produced the national figurehead, **Left and Center-Left parties elect and maintain a significantly higher percentage of women** than their counterparts on the Right. Meloni may be the most visible woman in Italian politics, but her own coalition remains predominantly male. The structural commitment to gender balance, in terms of who actually gets elected, still sits firmly on the left side of the spectrum.
 
 The chart below visualizes this divide, sorting parties by their percentage of female representatives.
 
@@ -303,8 +303,8 @@ ggplot(df_gender_plot, aes(x = party_acronym, y = plot_pct, fill = gender)) +
     fill = ""
   )
 ```
-### Education Gap: Women Need a Higher Bar to Enter Parliament
-While women are underrepresented in Parliament, those who secure a seat are often more educated than their male colleagues, suggesting they must clear a higher academic hurdle just to compete.
+### 1.4 Education Gap: Women Need a Higher Bar to Enter Parliament
+Women are underrepresented in Parliament, but the women who do get elected tend to be more educated than the men. This suggests that women may need stronger credentials just to be considered viable candidates in the first place.
 
 ```{r gender_education}
 # 1. DATA PREPARATION
@@ -371,11 +371,11 @@ ggplot(df_education_gender, aes(x = party_acronym, fill = education_level)) +
 ```
 
 
-### Professional Background: The Rise of Career Politicians
+### 1.5 Professional Background: The Rise of Career Politicians
 
-Are we governed by "common people" or a specialized elite? Unlike other European parliaments often populated by civil servants, the Italian Chamber reveals a different DNA.
+One question worth asking is whether Parliament actually reflects the people it represents, at least in terms of professional experience. Some European parliaments are full of former civil servants but Italy's is not.
 
-The data highlights a prevalence of **Lawyers** and **Professional Politicians**, often categorized under "Other" as they lack a distinct alternative career. Meanwhile, key sectors of society—such as healthcare, education, and the private corporate sector—remain underrepresented, suggesting a disconnect between the legislative body and the everyday workforce.
+The data highlights a dominance of **Lawyers** and **Professional Politicians**, often categorized under "Other" as they lack an alternative career. Meanwhile, people who work in healthcare, education, or the private sector are notably underrepresented. The result is a legislative body that doesn't look much like the broader workforce it's supposed to serve.
 
 ```{r professions}
 # 1. Enrich Data with Biographical Description
@@ -429,11 +429,11 @@ df_professions |>
   )
 ```
 
-### Political Geography: A Nation of Many Italies
+### 1.6 Political Geography: A Nation of Many Italies
 
 In Italy, politics is as regional as the cuisine. The country is not a uniform block but a mosaic of distinct socio-economic identities, and the voting data confirms a historical fracture.
 
-While **Fratelli d'Italia (FdI)** acts as a national homogenizer, other forces are deeply rooted in specific territories:
+While **Fratelli d'Italia (FdI)** acts as a national "homogenizer", other forces are deeply rooted in specific territories:
 
 * **The North:** This is the stronghold of **Lega** (born as a northern autonomist party) and **SVP** (representing linguistic minorities in South Tyrol).
 * **The Center-North:** The traditional "Red Belt" remains the primary reservoir for the **Democratic Party (PD)**.
@@ -515,13 +515,13 @@ ggplot(df_geo_analysis, aes(x = party_acronym, fill = macro_area)) +
   )
 ```
 
-## The "Short Week" Reality
+## 2. The "Short Week" Reality
 
 There is a popular and often malicious saying in Rome: *Parliament opens on Tuesday and closes on Thursday.* The stereotype depicts deputies as commuters who arrive in the capital on Monday night and rush to the airports by Thursday afternoon.
 
 Is this just a populist myth? The data suggests otherwise.
 
-### The Weekly Rhythm
+### 2.1 The Weekly Rhythm
 
 The analysis of voting timestamps confirms the **"Short Week"** is not a myth; it is the operating system of the Chamber.
 The legislative machine runs at full speed only on **Tuesdays and Wednesdays**. Mondays and Fridays are phantom days, with almost zero voting activity. The data validates the stereotype: for the average deputy, the parliamentary week effectively lasts 48 to 72 hours.
@@ -575,11 +575,15 @@ df_activity |>
   )
 ```
 
-### Summer Vacation
+### 2.2 Summer Vacation
 
-Parliamentary activity is strictly dictated by the calendar of holidays. August is the month of the great exodus: the Chamber effectively shuts down for the summer break, dropping to near-zero activity.
+Parliamentary activity is strictly dictated by the calendar of holidays. 
 
-Conversely, July witnesses a frantic spike in voting, a legislative sprint to clear the desk before the holidays begin. Coupled with the traditional December rush for the Budget Law, the data reveals a clear cyclic rhythm: the Parliament operates on a "school calendar," with distinct terms and long vacations.
+August is essentially a break month. The Chamber shuts down for summer vacation and voting activity drops to almost zero. But the month before that, in July, there's a noticeable spike as deputies rush to clear as much as possible before the break. You see a similar pattern around Easter in April, with a smaller peak in March as work ramps up beforehand.
+
+Another pattern is observed in December, which is intense in workload because of the annual Budget Law deadline. 
+
+The result is a legislature that operates in bursts: **long stretches of low activity followed by frantic voting as a deadline or a holiday approaches.**
 
 ```{r seasonality}
 # 1. Data Preparation
@@ -624,17 +628,18 @@ df_votazioni |>
   )
 ```
 
-# The Geometry of Consensus
+# 3. The Geometry of Consensus
 
-Is the parliament paralyzed by polarization? Or is there hidden cooperation?
+Coalition partners are supposed to vote together, and the opposition is supposed to oppose. But how clean is the reality? Do parties actually vote as blocs, or is there more crossover than the political rhetoric suggests?
 
-### The Stability Test: Measuring Government Muscle
+We wanted to see who breaks ranks, and when. Is Parliament as polarized as it looks on TV, or is there cooperation happening under the surface that doesn't make the headlines?
+
+### 3.1 The Stability Test: Measuring Government Muscle
 
 Does the solid majority on paper translate into actual voting power? 
-To test this, we analyzed the trend of **approved motions** over time, isolating only the moments when the Government successfully pushed legislation through.
+To check whether the **Center-Right coalition** can reliably pass legislation, we tracked approved motions over time, looking specifically at votes where the government got the outcome it wanted.
 
-The data tells a nuanced story. While the trend line shows a **slight physiological decline**—typical as the initial "honeymoon period" fades and routine sets in—it floats comfortably above the **absolute majority threshold (201 seats)**. 
-This indicates a coalition that may experience minor erosion but maintains a safe safety margin, avoiding the cliff-edge scenarios of previous unstable legislatures.
+The results are fairly stable. There's a slight decline over time, which is expected as government **loses slight momentum after the initial period** when discipline is tight. But even accounting for that, **the vote counts stay well above the 201-seat threshold** needed for an absolute majority. This isn't a coalition scraping by on razor-thin margins. There's enough of a buffer that losing a few votes doesn't cause the legislature to be unstable, unlike previous governments.
 
 ```{r stability}
 df_votazioni |>
@@ -667,15 +672,15 @@ df_votazioni |>
   )
 ```
 
-### Polarization vs. Consensus: The Three Clusters
+### 3.2 Polarization vs. Consensus: The Three Clusters
 
-If one were to judge Italian politics solely by talk shows, the conclusion would be one of perpetual chaos. However, mapping the votes reveals a precise **Geometry of Power** composed of three distinct behaviors.
+If you judge Italian politics based on talk shows, you'd assume Parliament is in a constant state of chaos. However, mapping the votes reveals a **Geometry of Power** composed of three distinct patterns of behaviors.
 
 This scatterplot maps every vote based on "Nays" (X-axis) vs "Ayes" (Y-axis). The data clusters into three logical zones:
 
-* **The Green Corner (Institutional Peace):** Top-left. Hundreds of votes with near-zero opposition. These are technical ratifications where the Chamber acts as a unified body.
+* **The Green Corner (Institutional Peace):** Top-left. A large number of votes pass with almost no opposition at all. These are mostly technical matters or routine ratifications where there's no real political disagreement, and the Chamber votes as a single body.
 * **The Blue Cloud (Majority Advance):** Top-center. The Government passes its laws. The opposition fights (voting against), but the majority numbers hold firm.
-* **The Red Zone (Majority Barrier):** Bottom-right. This area, dense with "Nays", represents **Minority proposals rejected by the Majority**. It is not the Government losing; it is the Government flexing its muscles to block Opposition amendments.
+* **The Red Zone (Majority Barrier):** Bottom-right. This area, dense with "Nays", represents **Minority proposals rejected by the Majority**. It is not the Government losing votes but rather flexing its muscles to block Opposition amendments.
 
 ```{r scatter_consensus}
 # 1. Data Classification
@@ -727,14 +732,14 @@ ggplot(df_vote_analysis, aes(x = contrari, y = favorevoli, color = outcome)) +
   )
 ```
 
-### Strategic Abstention: The Art of Non-Belligerence
+### 3.3 Strategic Abstention: The Art of Non-Belligerence
 
-In a binary world of "Ayes" and "Nays," abstention is a powerful political signal. It is the "Third Way."
-When the opposition abstains en masse, they are effectively saying: *"We do not support this law, but we will not stop it."*
+In a system built around "Ayes" and "Nays," abstention is a powerful political move.
+When the opposition abstains together, they are effectively saying: *"We do not support this law, but we will not stop it."*
 
 This usually happens in two scenarios:
 
-* **Tactical Agreements:** The government accepts an opposition amendment in exchange for a "soft" vote (abstention instead of rejection).
+* **Tactical Agreements:** The government accepts an opposition amendment in exchange for the opposition stepping back instead of voting against.
 * **Shared Responsibility:** On sensitive topics (foreign policy, ethical issues), voting against might be unpopular, so parties step aside.
 
 The scatterplot below highlights the **"Purple Zone"**: votes where **Abstentions outnumbered Nays**. These are the moments where the conflict was suspended.
@@ -793,18 +798,18 @@ ggplot(df_abstention, aes(x = contrari, y = astenuti, color = behavior)) +
   )
 ```
 
-### Anatomy of Conflict: Final Votes vs Amendments: The Moment of Truth
+### 3.4 Anatomy of Conflict: Final Votes vs Amendments: The Moment of Truth
 
 Legislative activity is divided into two distinct phases: the discussion of **Amendments** (modifications to the text) and the **Final Vote** (passage of the law).
 
-The visual comparison below is striking:
+The visual comparison below shows voting patterns in those two phases:
 
-* **Amendments (Grey):** This scatterplot mirrors the chaos of the general "Geometry of Consensus" (99% similarity). It is a dispersed cloud of **guerrilla warfare**, where the battle is technical, confused, and sometimes cross-party.
-* **Final Votes (Red):** Here, the picture sharpens immediately. The ambiguity disappears, and **almost all laws pass**. The dots condense into two specific winning zones:
+* **Amendments (Grey):** This scatterplot mirrors the chaos of the general "Geometry of Consensus" (99% similarity). The distribution is scattered and chaotic, without clear blocs or clean party divisions.
+* **Final Votes (Red):** Here, the picture is sharper. The ambiguity disappears, and **almost all laws pass**. The dots condense into two specific winning zones:
     1.  **Unanimity:** Broad institutional agreement (top-left corner).
     2.  **Majority Force:** The coalition lines up to push political laws through (top-center).
 
-When the final roll call is summoned, the skirmishes end, and the result is decisive.
+When it comes to the final roll call, we don't see any more fighting, and the result is more clean-cut.
 
 ```{r final_vs_amendments}
 # 1. Data Preparation: Distinguish Final Laws from Amendments

@@ -1,19 +1,16 @@
 # Introduction
 
-For the international observer, Italian politics is often reduced to a caricature of instability: a revolving door of Prime Ministers, technocratic crisis managers, and executives that barely last longer than a football season. Since the birth of the Republic in 1946, Italy has seen nearly 70 different governments: an average of one every 13 months.
+To anyone watching from abroad, Italian politics probably looks like chaos. Prime Ministers come and go, technocrats get called in to clean up the mess, and governments collapse before they've really had a chance to do anything. Since 1946, Italy has burned through nearly 70 different governments, which works out to one every 13 months or so.
 
-For us, as two Italians, this volatility is not just a statistic; it is the background noise of our civic lives. We are accustomed to a system designed to prevent authoritarianism but often accused of breeding paralysis. We know the rituals: the consultations at the Quirinale, the votes of confidence, and the constant reshuffling of alliances.
+For us, as two Italians, this isn't some abstract fact. It's just how things work. The system was built after Mussolini to make sure no one could grab too much power, but the trade-off has been decades of fragile coalitions and political gridlock. We've grown up watching the same cycle play out: the consultations at the Quirinale, the confidence votes, coalitions breaking apart and reforming with slightly different names.
 
-However, the current **XIX Legislature** offers a rare opportunity for analysis. For the first time in years, the Chamber of Deputies is not held hostage by a fragile coalition, but is driven by a clear political majority. This shift changes the physics of the parliamentary hall. It moves the conversation from *"will the government survive the night?"* to *"how is the legislative machine actually functioning?"*
+But the current legislature, the XIX, is actually different, and that's what makes it worth studying. For the first time in a while, there's a genuine majority in the Chamber of Deputies. Now, instead of asking "will this government make it to next month?", we can finally ask "what is it actually doing?"
 
-Beneath the headlines and the talk-show rhetoric, the Parliament is a massive data generator. Every electronic vote, every committee attendance, and every legislative text leaves a digital footprint.
+And it turns out Parliament generates a lot of data. Every electronic vote, committee session, and draft bill is recorded. So rather than relying on pundit takes and newspaper headlines, we wanted to look at what the numbers actually show.
+We've organized our analysis around three questions:
 
-In this project, we move beyond the narrative of instability to look at the empirical reality. Using the Linked Open Data provided by the *Camera dei Deputati*, we perform a quantitative autopsy of the current term, organized into three distinct stories:
+**1. Who's in the room?** The Chamber was reduced to 400 seats this legislature. What does that mean for representation? Is it more women, fewer women? Are Southern regions still underrepresented compared to the North?
 
--   **The Players (Who Represents Us?)** Before analyzing their actions, we must understand their identity. Who sits in the 400 seats of the reduced Chamber? We explore the demographics, the "Meloni Paradox" regarding gender balance, and the sharp geographic divide that still splits the country between North and South.
+**2.When does Parliament actually work?** There's a running "fallacy" that MPs only show up Tuesday through Thursday. Is that true? Can we see it in the voting timestamps?
 
--   **The "Short Week" Reality** There is a popular saying that deputies work only from Tuesday to Thursday. Is it a populist myth or a statistical fact? We analyze the timestamps of thousands of votes to reveal the true heartbeat of the Chamber, exposing the "school calendar" rhythm of legislative activity.
-
--   **The Palace Games** Beyond the shouting matches on TV, how does the voting machine actually work? We map the **"Geometry of Consensus"** to show that enemies often vote together on technicalities, expose the tactical use of **Strategic Abstention**, and analyze whether the solid majority truly holds when the final roll call is summoned.
-
-This is not just a study of laws; it is a data-driven tour of the Italian Parliament, stripping away the noise to see how the Republic actually works.
+**3.How do parties actually vote?** Coalition partners are supposed to vote together, and the opposition is supposed to oppose. But how messy is the reality? Who breaks ranks, and at what stage of the voting?
