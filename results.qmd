@@ -34,7 +34,7 @@ read_camera_rdf <- function(file_path) {
 
 # A. VOTING RECORDS (Votazioni)
 # Contains the outcome of every parliamentary vote
-df_votazioni <- read_camera_rdf("votazione-19.rdf") |>
+df_votazioni <- read_camera_rdf("data/votazione-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
   mutate(across(c(votanti, favorevoli, contrari, astenuti), as.numeric)) |>
@@ -42,7 +42,7 @@ df_votazioni <- read_camera_rdf("votazione-19.rdf") |>
 
 # B. SESSION CALENDAR (Sedute)
 # Links votes to specific dates and session types
-df_sedute <- read_camera_rdf("seduta-19.rdf") |>
+df_sedute <- read_camera_rdf("data/seduta-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
   mutate(date = ymd(date)) |> 
@@ -50,7 +50,7 @@ df_sedute <- read_camera_rdf("seduta-19.rdf") |>
 
 # C. DEPUTIES REGISTRY (Deputati)
 # Demographic info (Gender, Age, Profession)
-df_deputati <- read_camera_rdf("deputato-19.rdf") |>
+df_deputati <- read_camera_rdf("data/deputato-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
   # Extract numeric ID (e.g. 307471) ignoring the legislature prefix
@@ -58,14 +58,14 @@ df_deputati <- read_camera_rdf("deputato-19.rdf") |>
 
 # D. ELECTION RESULTS (Elezioni)
 # Contains the Electoral List and Constituency for every elected official
-df_elezioni <- read_camera_rdf("elezione-19.rdf") |>
+df_elezioni <- read_camera_rdf("data/elezione-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
   mutate(id_numerico = str_extract(id, "\\d{5,}"))
 
 # E. PARLIAMENTARY GROUPS (Dictionary)
 # Maps Group IDs to full Party Names
-df_groups_dict <- read_camera_rdf("gruppoParlamentare-19.rdf") |>
+df_groups_dict <- read_camera_rdf("data/gruppoParlamentare-19.rdf") |>
   distinct(id, variable, .keep_all = TRUE) |>
   pivot_wider(names_from = variable, values_from = value) |>
   select(id, label) |>
@@ -109,7 +109,7 @@ df_deputati_final <- df_deputati |>
   # Map raw strings to clean Acronyms
   mutate(
     party_acronym = case_when(
-      is.na(final_party_raw) ~ "Unknown/Misto",
+      is.na(final_party_raw) ~ "First-past-the-post Candidates",
       str_detect(final_party_raw, regex("FRATELLI D'ITALIA", ignore_case = TRUE)) ~ "FdI",
       str_detect(final_party_raw, regex("DEMOCRATICO", ignore_case = TRUE)) ~ "PD",
       str_detect(final_party_raw, regex("LEGA", ignore_case = TRUE)) ~ "Lega",
@@ -120,8 +120,6 @@ df_deputati_final <- df_deputati |>
       str_detect(final_party_raw, regex("MODERATI|NOI", ignore_case = TRUE)) ~ "NM",
       str_detect(final_party_raw, regex("MAIE", ignore_case = TRUE)) ~ "MAIE",
       str_detect(final_party_raw, regex("SVP|PATT|SÜDTIROLER|MINORANZE", ignore_case = TRUE)) ~ "SVP",
-      str_detect(final_party_raw, regex("LEGA.*FORZA ITALIA|FRATELLI D'ITALIA.*LEGA", ignore_case = TRUE)) ~ "Uninominal (Coalition)",
-      str_detect(final_party_raw, regex("MISTO", ignore_case = TRUE)) ~ "Misto",
       TRUE ~ "Other"
     )
   )
@@ -138,11 +136,8 @@ party_colors <- c(
   "AVS" = "#568203",  # Avocado Green
   "NM" = "#333333",   # Dark Grey
   "SVP" = "#000000",  # Black
-  "Uninominal (Coalition)" = "#4B0082", # Indigo
   "MAIE" = "#ADD8E6", # Sky Blue
-  "Misto" = "#999999",# Grey
-  "Other" = "#CCCCCC",
-  "Unknown/Misto" = "#E0E0E0"
+  "First-past-the-post Candidates" = "#CCCCCC"
 )
 ```
 
@@ -159,9 +154,10 @@ Before we analyze what they do, we must understand who they are. Let's debunk th
 
 The snap elections of **September 25, 2022**, delivered a decisive verdict, ending a decade of hung parliaments. The vote handed a sweeping majority to the **Center-Right coalition**, driven by the unprecedented rise of *Fratelli d'Italia* (FdI), which established itself as the leading political force.
 
-This outcome was amplified by the "Rosatellum" electoral law, a complex mixed system. Out of 400 seats, **147 deputies** were elected in winner-takes-all **uninominal colleges** (single-member districts), where coalition unity is key, while the remaining were assigned via proportional plurinominal lists.
+This outcome was amplified by the "Rosatellum" electoral law, a complex mixed system. Out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). These candidates were supported by the entire coalition, and in the voting data, they are often grouped by their broader **bloc** rather than a single list, while the remaining were assigned via proportional plurinominal lists.
 
 Does this translate into a solid command of the Chamber? The data confirms a clear numerical advantage.
+
 
 ```{r chamber_composition}
 # Plotting the Chamber Composition based on the final cleaned dataset
@@ -192,9 +188,9 @@ df_deputati_final |>
   # 8. Clean theme adjustments
   theme_minimal() +
   theme(
-    legend.position = "none",                   # Hide legend (redundant with y-axis labels)
-    panel.grid.major.y = element_blank(),       # Remove horizontal grid lines for cleanliness
-    axis.text.y = element_text(size = 11, face = "bold") # Make party names readable
+    legend.position = "none",
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 11, face = "bold")
   ) +
   
   # 9. Final Titles and Labels
@@ -207,179 +203,13 @@ df_deputati_final |>
 ```
 
 
-```{r map_plurinominal}
-
-# --- 1. SETUP ---
-library(sf)
-library(tidyverse)
-# Update this path to your PLURINOMINALI folder
-shapefile_path <- "CAMERA_CollegiPLURINOMINALI_2020/CAMERA_CollegiPLURINOMINALI_2020.shp"
-map_pluri <- read_sf(shapefile_path)
-
-# --- 2. CLEAN DATA & FIX REGION NAMES ---
-df_cleaned_winners <- df_deputati_final |>
-  left_join(df_elezioni |> select(id_numerico, coverage), by = "id_numerico") |>
-  filter(str_detect(coverage, "P\\d+")) |>
-  
-  # --- FIX 1: MANUAL NAME CORRECTION ---
-  mutate(
-    coverage_clean = coverage,
-    # Fix Trentino (Remove the Unicode mess)
-    coverage_clean = str_replace(coverage_clean, "S\\\\u00DCDTIROL", "SUDTIROL"),
-    coverage_clean = str_replace(coverage_clean, "SÜDTIROL", "SUDTIROL"),
-    # Fix Valle d'Aosta (Remove apostrophe issues)
-    coverage_clean = str_replace(coverage_clean, "VALLE D'AOSTA", "VALLE D AOSTA"),
-    # Fix Friuli (Standardize hyphens)
-    coverage_clean = str_replace(coverage_clean, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
-    
-    # Create the Join Key (Uppercase, No spaces, No non-alphanumeric)
-    join_key = str_to_upper(coverage_clean) |> str_remove_all("[^A-Z0-9]")
-  ) |>
-  
-  # --- FIX 2: HANDLE "MISTO" ---
-  # Filter out "Misto" so we see the winning POLITICAL party, not the mixed group
-  filter(party_acronym != "Misto", party_acronym != "Unknown/Misto") |>
-  
-  # AGGREGATE: Find winner per college
-  count(join_key, party_acronym) |>
-  group_by(join_key) |>
-  slice_max(n, n = 1, with_ties = FALSE) |> 
-  ungroup()
-
-# --- 3. CLEAN MAP ---
-map_ready <- map_pluri |>
-  mutate(
-    # Apply EXACTLY the same fixes to the Map Names
-    temp_name = str_to_upper(CP20_DEN),
-    temp_name = str_replace(temp_name, "SÜDTIROL", "SUDTIROL"),
-    temp_name = str_replace(temp_name, "VALLE D'AOSTA", "VALLE D AOSTA"),
-    temp_name = str_replace(temp_name, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
-    
-    # Handle Roman Numerals (Common in Map files)
-    temp_name = str_replace(temp_name, "LAZIO I", "LAZIO 1"),
-    temp_name = str_replace(temp_name, "LAZIO II", "LAZIO 2"),
-    temp_name = str_replace(temp_name, "SICILIA I", "SICILIA 1"),
-    temp_name = str_replace(temp_name, "SICILIA II", "SICILIA 2"),
-    temp_name = str_replace(temp_name, "VENETO I", "VENETO 1"),
-    temp_name = str_replace(temp_name, "VENETO II", "VENETO 2"),
-    temp_name = str_replace(temp_name, "CAMPANIA I", "CAMPANIA 1"),
-    temp_name = str_replace(temp_name, "CAMPANIA II", "CAMPANIA 2"),
-    temp_name = str_replace(temp_name, "PIEMONTE I", "PIEMONTE 1"),
-    temp_name = str_replace(temp_name, "PIEMONTE II", "PIEMONTE 2"),
-    temp_name = str_replace(temp_name, "LOMBARDIA I", "LOMBARDIA 1"),
-    temp_name = str_replace(temp_name, "LOMBARDIA II", "LOMBARDIA 2"),
-    temp_name = str_replace(temp_name, "LOMBARDIA III", "LOMBARDIA 3"),
-    temp_name = str_replace(temp_name, "LOMBARDIA IV", "LOMBARDIA 4"),
-
-    # Final Join Key
-    join_key = str_remove_all(temp_name, "[^A-Z0-9]")
-  ) |>
-  left_join(df_cleaned_winners, by = "join_key")
-
-# --- 4. PLOT ---
-ggplot(map_ready) +
-  geom_sf(aes(fill = party_acronym), color = "white", size = 0.1) +
-  scale_fill_manual(values = party_colors, na.value = "grey80") +
-  theme_void() +
-  labs(
-    title = "Political Map (Plurinominal Colleges)",
-    subtitle = "Largest Party by District (Excluding Misto)",
-    fill = "Party"
-  )
-```
-
-
-```{r}
-
-# --- 1. DEFINE COALITIONS ---
-# We create a helper function or logic to group parties
-get_coalition <- function(party) {
-  case_when(
-    party %in% c("FdI", "Lega", "FI", "NM") ~ "Center-Right",
-    party %in% c("PD", "AVS", "Az-IV", "SVP") ~ "Center-Left", # Az-IV sometimes runs alone, but often groups here for visuals
-    party == "M5S" ~ "M5S",
-    TRUE ~ "Other"
-  )
-}
-
-# --- 2. PREPARE DATA ---
-df_coalition_winners <- df_deputati_final |>
-  left_join(df_elezioni |> select(id_numerico, coverage), by = "id_numerico") |>
-  filter(str_detect(coverage, "P\\d+")) |>
-  
-  # Clean Names (Same as before)
-  mutate(
-    coverage_clean = coverage,
-    coverage_clean = str_replace(coverage_clean, "S\\\\u00DCDTIROL", "SUDTIROL"),
-    coverage_clean = str_replace(coverage_clean, "SÜDTIROL", "SUDTIROL"),
-    coverage_clean = str_replace(coverage_clean, "VALLE D'AOSTA", "VALLE D AOSTA"),
-    coverage_clean = str_replace(coverage_clean, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
-    join_key = str_to_upper(coverage_clean) |> str_remove_all("[^A-Z0-9]")
-  ) |>
-  
-  # --- NEW STEP: Group by Coalition ---
-  mutate(coalition = get_coalition(party_acronym)) |>
-  
-  # Count deputies per COALITION per College
-  count(join_key, coalition) |>
-  group_by(join_key) |>
-  slice_max(n, n = 1, with_ties = FALSE) |> 
-  ungroup()
-
-# --- 3. COLORS FOR COALITIONS ---
-coalition_colors <- c(
-  "Center-Right" = "#003366", # Dark Blue
-  "Center-Left"  = "#EF3E36", # Red
-  "M5S"          = "#F4C430", # Yellow
-  "Other"        = "#999999"  # Grey
-)
-
-# --- 4. PLOT ---
-map_ready_coalition <- map_pluri |>
-  mutate(
-    temp_name = str_to_upper(CP20_DEN),
-    # ... (Include all your map name cleaning lines from previous step here) ...
-    temp_name = str_replace(temp_name, "SÜDTIROL", "SUDTIROL"),
-    temp_name = str_replace(temp_name, "VALLE D'AOSTA", "VALLE D AOSTA"),
-    temp_name = str_replace(temp_name, "FRIULI-VENEZIA GIULIA", "FRIULI VENEZIA GIULIA"),
-    temp_name = str_replace(temp_name, "LAZIO I", "LAZIO 1"),
-    temp_name = str_replace(temp_name, "LAZIO II", "LAZIO 2"),
-    temp_name = str_replace(temp_name, "SICILIA I", "SICILIA 1"),
-    temp_name = str_replace(temp_name, "SICILIA II", "SICILIA 2"),
-    temp_name = str_replace(temp_name, "VENETO I", "VENETO 1"),
-    temp_name = str_replace(temp_name, "VENETO II", "VENETO 2"),
-    temp_name = str_replace(temp_name, "CAMPANIA I", "CAMPANIA 1"),
-    temp_name = str_replace(temp_name, "CAMPANIA II", "CAMPANIA 2"),
-    temp_name = str_replace(temp_name, "PIEMONTE I", "PIEMONTE 1"),
-    temp_name = str_replace(temp_name, "PIEMONTE II", "PIEMONTE 2"),
-    temp_name = str_replace(temp_name, "LOMBARDIA I", "LOMBARDIA 1"),
-    temp_name = str_replace(temp_name, "LOMBARDIA II", "LOMBARDIA 2"),
-    temp_name = str_replace(temp_name, "LOMBARDIA III", "LOMBARDIA 3"),
-    temp_name = str_replace(temp_name, "LOMBARDIA IV", "LOMBARDIA 4"),
-    join_key = str_remove_all(temp_name, "[^A-Z0-9]")
-  ) |>
-  left_join(df_coalition_winners, by = "join_key")
-
-ggplot(map_ready_coalition) +
-  geom_sf(aes(fill = coalition), color = "white", size = 0.1) +
-  scale_fill_manual(values = coalition_colors, na.value = "grey80") +
-  theme_void() +
-  labs(
-    title = "Political Map by Coalition",
-    subtitle = "Right vs Left vs M5S",
-    fill = "Coalition"
-  )
-```
-
-
-
-
-
 ### Gender Balance: the Meloni Paradix
 
-Italy faces a fascinating contradiction. The ultimate "glass ceiling" was broken by the Right, with **Giorgia Meloni** becoming the first female Prime Minister in the Republic's history.
+Italy faces a fascinating contradiction. The ultimate "glass ceiling" was broken by the **Right**, with **Giorgia Meloni** becoming the first female Prime Minister in the Republic's history. This historical achievement came despite the fact that political battles for gender quotas and structural equality have traditionally been hallmarks of the **Left**.
 
-Historically, however, the push for gender equality and quotas has been a hallmark of the Left. Does having a woman in command translate into a more balanced Parliament across the board? Or does the data reveal a structural gap between the leader's gender and the party's composition?
+Is this a true paradox? The data below provides a clear answer: **No.**
+
+While the Right produced the national figurehead, **Left and Center-Left parties structurally elect and maintain a significantly higher percentage of women** within their own ranks, keeping their internal composition much closer to the overall parliamentary average. The structural commitment to gender balance remains clearly stronger on the left side of the political spectrum.
 
 The chart below visualizes this divide, sorting parties by their percentage of female representatives.
 
@@ -393,12 +223,10 @@ df_demographics_full <- df_deputati_final |>
 df_gender_plot <- bind_rows(
   # Individual Parties
   df_demographics_full |> 
-    filter(party_acronym != "Unknown/Misto", !is.na(gender)) |> 
     select(party_acronym, gender),
   
   # The "Overall" Benchmark (Parliament Average)
   df_demographics_full |> 
-    filter(party_acronym != "Unknown/Misto", !is.na(gender)) |> 
     mutate(party_acronym = "OVERALL") |> 
     select(party_acronym, gender)
 ) |>
@@ -417,9 +245,24 @@ df_gender_plot <- bind_rows(
 
 # 3. Sorting Logic
 # We sort parties based on the percentage of FEMALE representatives (High to Low)
-order_gender <- df_gender_plot |> 
-  filter(gender == "female") |> 
-  arrange(pct) |> 
+# A. Calculate Female % for ALL parties (0% for all-male groups)
+df_female_pct <- df_gender_plot |>
+  # Focus only on the percentage of females
+  filter(gender == "female") |>
+  select(party_acronym, female_pct = pct)
+
+# B. Get list of ALL parties (including those with 0% female)
+all_parties_list <- unique(df_gender_plot$party_acronym)
+
+# C. Join and fill NAs with 0
+df_sort_base <- tibble(party_acronym = all_parties_list) |>
+  left_join(df_female_pct, by = "party_acronym") |>
+  # CRITICAL: Fill NA percentages (parties with 0 women) with 0
+  mutate(female_pct = replace_na(female_pct, 0))
+
+# D. Create the final order vector (sort by the calculated female_pct)
+order_gender <- df_sort_base |>
+  arrange(female_pct) |> # Arranges lowest % female to highest % female
   pull(party_acronym)
 
 # Apply factor order
@@ -443,7 +286,7 @@ ggplot(df_gender_plot, aes(x = party_acronym, y = plot_pct, fill = gender)) +
   scale_fill_manual(values = c("female" = "#D55E00", "male" = "#0072B2")) +
   
   # White centerline
-  geom_hline(yintercept = 0, color = "white", size = 1) +
+  geom_hline(yintercept = 0, color = "white", linewidth = 1) +
   
   theme_minimal() + 
   theme(
@@ -460,62 +303,70 @@ ggplot(df_gender_plot, aes(x = party_acronym, y = plot_pct, fill = gender)) +
     fill = ""
   )
 ```
+### Education Gap: Women Need a Higher Bar to Enter Parliament
+While women are underrepresented in Parliament, those who secure a seat are often more educated than their male colleagues, suggesting they must clear a higher academic hurdle just to compete.
 
-
-```{r gender_education_gap_final}
+```{r gender_education}
 # 1. DATA PREPARATION
 df_education_gender <- df_deputati_final |>
-  left_join(df_deputati, by = "id_numerico") |>
+  # Join Deputies Demographic Info (description and gender)
+  left_join(df_deputati |> select(id_numerico, gender, description), by = "id_numerico") |>
   filter(party_acronym != "Unknown/Misto") |>
+  
+  # --- FILTERING OUT MINOR PARTIES ---
+  filter(!party_acronym %in% c("SVP", "First-past-the-post Candidates")) |>
   
   mutate(
     gender_label = ifelse(gender == "female", "Female", "Male"),
     
-    # Step 1: Extract Degree info
-    # We scan for "Laurea". If found, it's "Graduate", otherwise "Other".
-    raw_education = ifelse(
-      str_detect(description, regex("Laurea", ignore_case = TRUE)), 
-      "Graduate", 
-      "Other"
+    # 1. CLASSIFY EDUCATION (HIERARCHICALLY)
+    education_level_raw = case_when(
+      str_detect(description, regex("Dottorato|PhD", ignore_case = TRUE)) ~ "PhD / Doctorate",
+      str_detect(description, regex("Laurea|Master|Specialistica|Università", ignore_case = TRUE)) ~ "Graduate Degree",
+      str_detect(description, regex("Diploma|Maturità|Liceo|Istituto Tecnico", ignore_case = TRUE)) ~ "High School Diploma",
+      TRUE ~ "Other / Not Declared"
     ),
     
-    # Step 2: NUCLEAR FIX for NAs
-    # If the description was empty (NA), the code above might yield NA.
-    # We force those NAs to become "Other".
-    clean_education = replace_na(raw_education, "Other"),
-    
-    # Step 3: Set Factor Levels
-    # We define only two levels. 
-    education_level = factor(clean_education, levels = c("Graduate", "Other"))
+    # 2. Set Factor Levels (Ensuring the order is logical, from Lowest to Highest)
+    education_level = factor(education_level_raw, 
+                             levels = c("Other / Not Declared", "High School Diploma", "Graduate Degree", "PhD / Doctorate"))
   )
 
-# 2. PLOTTING
-ggplot(df_education_gender, aes(x = gender_label, fill = education_level)) +
+# 2. PLOTTING (FACETED GRID - 2 COLONNE)
+ggplot(df_education_gender, aes(x = party_acronym, fill = education_level)) +
   
-  # reverse = TRUE forces the first factor level ("Graduate") to the bottom
   geom_bar(position = position_fill(reverse = TRUE), width = 0.7) +
   
-  facet_wrap(~ party_acronym, nrow = 2) + 
+  facet_grid(party_acronym ~ gender_label, scales = "free_y", switch = "y") +
   
-  # Colors
-  scale_fill_manual(values = c("Graduate" = "cornflowerblue", "Other" = "#CCCCCC")) +
+  coord_flip() +
   
-  scale_y_continuous(labels = scales::percent) +
+  # Sequential Greens/Teals
+  scale_fill_manual(values = c(
+    "Other / Not Declared" = "#D9E3D9",
+    "High School Diploma" = "#A8D19F",
+    "Graduate Degree" = "#589C4C",
+    "PhD / Doctorate" = "#2D5A20"
+  )) +
+  
+  scale_y_continuous(labels = scales::percent) + 
   
   theme_minimal() +
   theme(
-    panel.grid.major.x = element_blank(),
-    legend.position = "top",
-    axis.text.x = element_text(face = "bold"),
-    strip.text = element_text(face = "bold", size = 11)
+    panel.grid.major.y = element_blank(), 
+    panel.grid.minor = element_blank(),
+    strip.placement = "outside", 
+    axis.text.y = element_blank(),
+    strip.text.x = element_text(face = "bold", size = 10),
+    strip.text.y.left = element_text(face = "bold", size = 10, angle = 0, hjust = 1) 
   ) +
   
   labs(
-    title = "Education Gap by Gender & Party",
-    subtitle = "Percentage of Graduates (Green/Bottom) vs Others (Grey/Top)",
-    x = "", 
-    y = "% of Group", 
-    fill = "Education"
+    title = "Education Gap by Gender & Party (Horizontal)",
+    subtitle = "Educational attainment of MPs: Separated by Gender and Party Group",
+    x = "",
+    y = "% of Group",
+    fill = "Education Level"
   )
 ```
 
@@ -664,7 +515,6 @@ ggplot(df_geo_analysis, aes(x = party_acronym, fill = macro_area)) +
   )
 ```
 
-
 ## The "Short Week" Reality
 
 There is a popular and often malicious saying in Rome: *Parliament opens on Tuesday and closes on Thursday.* The stereotype depicts deputies as commuters who arrive in the capital on Monday night and rush to the airports by Thursday afternoon.
@@ -725,7 +575,7 @@ df_activity |>
   )
 ```
 
-### Here is the revised Seasonality section.
+### Summer Vacation
 
 Parliamentary activity is strictly dictated by the calendar of holidays. August is the month of the great exodus: the Chamber effectively shuts down for the summer break, dropping to near-zero activity.
 
@@ -774,7 +624,7 @@ df_votazioni |>
   )
 ```
 
-# 3. The Geometry of Consensus
+# The Geometry of Consensus
 
 Is the parliament paralyzed by polarization? Or is there hidden cooperation?
 

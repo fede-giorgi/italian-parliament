@@ -16,6 +16,14 @@ Unlike the flat, wide-format CSV files common in political science research, the
 -   **`elezione-19.rdf` (Elections):** The geographic link. This file connects individual deputies to their specific electoral colleges and constituencies, enabling the spatial analysis of representation across the North-South divide.
 -   **`gruppoParlamentare-19.rdf` (Groups):** A reference dictionary that maps internal group codes to the official names of Parliamentary Groups (Parties), essential for decoding political affiliations.
 
+### Missing Data and NAs
+
+The dataset presents distinct categories of missing values (NAs), which are not merely errors but reflections of either genuine information gaps or structural features of the Italian electoral system.
+
+* **Undeclared Personal Information:** A portion of the NAs stems from the voluntary nature of certain disclosures. For instance, in the demographic analysis, missing values in the "Education Level" or "Profession" fields occur when a deputy chooses not to publicly declare these details in their official profile.
+* **Structural NAs (First-Past-the-Post Candidates):** A significant number of missing values in the "Party" field is a byproduct of the mixed electoral law (*Rosatellum*). Candidates elected in single-member districts (first-past-the-post) are technically supported by a coalition rather than a single list. Consequently, the raw data for these deputies lacks a direct link to a specific party acronym.
+* **Regional Anomalies (Valle d'Aosta):** The autonomous region of Valle d'Aosta operates under a unique legal framework with a single-member constituency system that differs from the national standard.
+
 ## Data Quality and Challenges
 
 The transition from Semantic Web standards (triplets) to tabular data presents specific challenges. A preliminary review confirmed that while the numerical data (vote counts) is robust, the categorical metadata required significant harmonization.

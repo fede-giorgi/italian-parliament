@@ -1,1 +1,12 @@
 # Conclusion
+
+While this analysis provides a structural X-ray of the XIX Legislature, it remains a macroscopic overview: a map of the battlefield rather than a chronicle of every duel. The current dataset allows us to measure *volume* and *alignment*, but to truly decode the "game of politics," we must dig deeper into the nuances of parliamentary behavior.
+
+The following areas represent the next frontier for this research, requiring the integration of more granular data streams:
+
+* **Internal Cohesion and "Snipers" (*Franchi Tiratori*):** Our current analysis treats parties as monolithic blocks. However, political drama often lies in the cracks. By integrating individual roll-call votes (who voted for what), we could measure **Party Discipline Indices** to identify which groups are most prone to internal rebellion and spot the so-called "snipers" who vote against their own coalition in secret ballots.
+* **The "Turncoat" Phenomenon (*Cambio di Casacca*):** The current snapshot assigns one party per deputy based on election results or current affiliation. A longitudinal analysis tracking changes in group affiliation over time would reveal the volatility of political loyalty, quantifying the phenomenon of *trasformismo* that has historically plagued Italian parliaments.
+* **Semantic Conflict Analysis:** We know *how* they vote, but not always *what* they are fighting about. Applying Natural Language Processing (NLP) to the text of amendments and parliamentary debates would allow us to map the **Thematic Polarization**. Are economic issues more divisive than civil rights? Do technical bills generate more cross-party consensus than ideological manifestos?
+* **Government vs. Parliament Efficiency:** Finally, a crucial metric is missing: the **Success Rate**. How many bills proposed by MPs actually become law compared to those initiated by the Government? Analyzing the "mortality rate" of private member bills versus government decrees would definitively answer whether the Parliament remains a legislative power or has evolved into a mere ratification chamber for the Executive.
+
+In conclusion, while the numbers confirm the stability and discipline of the current majority, the true health of a democracy is measured not just by the efficiency of its voting machine, but by the quality of its debate and the independence of its representatives. Expanding this dataset is the first step toward that deeper understanding.

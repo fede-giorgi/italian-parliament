@@ -145,7 +145,10 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
-  <li><a href="#structure-and-dimensions" id="toc-structure-and-dimensions" class="nav-link" data-scroll-target="#structure-and-dimensions"><span class="header-section-number">2.2</span> Structure and Dimensions</a></li>
+  <li><a href="#structure-and-dimensions" id="toc-structure-and-dimensions" class="nav-link" data-scroll-target="#structure-and-dimensions"><span class="header-section-number">2.2</span> Structure and Dimensions</a>
+  <ul class="collapse">
+  <li><a href="#missing-data-and-nas" id="toc-missing-data-and-nas" class="nav-link" data-scroll-target="#missing-data-and-nas"><span class="header-section-number">2.2.1</span> Missing Data and NAs</a></li>
+  </ul></li>
   <li><a href="#data-quality-and-challenges" id="toc-data-quality-and-challenges" class="nav-link" data-scroll-target="#data-quality-and-challenges"><span class="header-section-number">2.3</span> Data Quality and Challenges</a></li>
   <li><a href="#access" id="toc-access" class="nav-link" data-scroll-target="#access"><span class="header-section-number">2.4</span> Access</a></li>
   </ul>
@@ -188,6 +191,15 @@ ul.task-list li input[type="checkbox"] {
 <li><strong><code>elezione-19.rdf</code> (Elections):</strong> The geographic link. This file connects individual deputies to their specific electoral colleges and constituencies, enabling the spatial analysis of representation across the North-South divide.</li>
 <li><strong><code>gruppoParlamentare-19.rdf</code> (Groups):</strong> A reference dictionary that maps internal group codes to the official names of Parliamentary Groups (Parties), essential for decoding political affiliations.</li>
 </ul>
+<section id="missing-data-and-nas" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="missing-data-and-nas"><span class="header-section-number">2.2.1</span> Missing Data and NAs</h3>
+<p>The dataset presents distinct categories of missing values (NAs), which are not merely errors but reflections of either genuine information gaps or structural features of the Italian electoral system.</p>
+<ul>
+<li><strong>Undeclared Personal Information:</strong> A portion of the NAs stems from the voluntary nature of certain disclosures. For instance, in the demographic analysis, missing values in the “Education Level” or “Profession” fields occur when a deputy chooses not to publicly declare these details in their official profile.</li>
+<li><strong>Structural NAs (First-Past-the-Post Candidates):</strong> A significant number of missing values in the “Party” field is a byproduct of the mixed electoral law (<em>Rosatellum</em>). Candidates elected in single-member districts (first-past-the-post) are technically supported by a coalition rather than a single list. Consequently, the raw data for these deputies lacks a direct link to a specific party acronym.</li>
+<li><strong>Regional Anomalies (Valle d’Aosta):</strong> The autonomous region of Valle d’Aosta operates under a unique legal framework with a single-member constituency system that differs from the national standard.</li>
+</ul>
+</section>
 </section>
 <section id="data-quality-and-challenges" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="data-quality-and-challenges"><span class="header-section-number">2.3</span> Data Quality and Challenges</h2>
