@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Data – italian parliament</title>
+<title>2&nbsp; Data – Italian Parliament</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -97,9 +97,9 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">italian parliament</a> 
+      <a href="./">Italian Parliament</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/fede-giorgi/italian-parliament" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
     </div>
       </div>
@@ -152,7 +152,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#data-quality-and-challenges" id="toc-data-quality-and-challenges" class="nav-link" data-scroll-target="#data-quality-and-challenges"><span class="header-section-number">2.3</span> Data Quality and Challenges</a></li>
   <li><a href="#access" id="toc-access" class="nav-link" data-scroll-target="#access"><span class="header-section-number">2.4</span> Access</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/fede-giorgi/italian-parliament/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fede-giorgi/italian-parliament/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -178,7 +178,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
-<p>All the data for this project comes from the official <strong>Linked Open Data</strong> repository run by the <strong>Camera dei Deputati</strong>. The data gets updated in real time as Parliament does its work, which means we’re looking at a live picture of legislative activity.</p>
+<p>All the data for this project comes from the official <strong>Linked Open Data</strong> repository run by the <strong>Chamber of Deputies (Camera dei Deputati)</strong>. The data gets updated in real time as Parliament does its work, which means we’re looking at a live picture of legislative activity.</p>
 <p>We focused specifically on the XIX Legislature (started on October 13, 2022) which breaks the pattern of the last several years: there is a clear winner in the election, a stable majority, and the government is not mingled together from five different parties that cannot agree on legislatures. That makes it a useful case study for understanding how the Parliament behaves when it’s not constantly fighting.</p>
 </section>
 <section id="structure-and-dimensions" class="level2" data-number="2.2">
@@ -203,12 +203,12 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="data-quality-and-challenges" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="data-quality-and-challenges"><span class="header-section-number">2.3</span> Data Quality and Challenges</h2>
-<p>Converting the data from RDF format into usable dataframes was the most tedious part of this project. RDF stores everything as triplets, which is useful for representing linked data but doesn’t translate easily into tables you need for analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.</p>
+<p>Converting the data from RDF format into usable dataframes was one of the most tedious part of this project. RDF stores everything as triplets, which is useful for representing linked data but doesn’t translate easily into tables you need for analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.</p>
 <p>Another issue was that a lot of fields are just raw strings such as profession and level of education: these often came as free text rather than standardized categories. We spent a fair amount of time cleaning and standardizing these fields before we could do anything useful with them.</p>
 </section>
 <section id="access" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="access"><span class="header-section-number">2.4</span> Access</h2>
-<p>The data is publicly available through the <a href="http://dati.camera.it/it/">dati.camera.it</a> portal under an Open Data license (CC-BY 4.0). While the Chamber provides the raw RDF dumps, we transformed these triplets into R dataframes manually.</p>
+<p>The data is publicly available through the <a href="https://dati.camera.it/en">dati.camera.it</a> portal under an Open Data license (CC-BY 4.0). While the Chamber provides the raw RDF dumps, we transformed these triplets into R dataframes manually.</p>
 
 
 </section>
@@ -633,7 +633,7 @@ ul.task-list li input[type="checkbox"] {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fede-giorgi/italian-parliament/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fede-giorgi/italian-parliament/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
