@@ -10,6 +10,6 @@ And it turns out Parliament generates a lot of data including electronic vote, c
 
 **1. Who's in the room?** The Chamber was reduced to 400 seats this legislature. What does that mean for representation? Is it more women, fewer women? Are Southern regions still underrepresented compared to the North?
 
-**2.When does Parliament actually work?** There's a running "fallacy" that MPs only show up Tuesday through Thursday. Is that true? Can we see it in the voting timestamps?
+**2. When does Parliament actually work?** There's a running "fallacy" that MPs only show up Tuesday through Thursday. Is that true? Can we see it in the voting timestamps?
 
-**3.How do parties actually vote?** Coalition partners are supposed to vote together, and the opposition is supposed to oppose. But how messy is the reality? Who breaks ranks, and at what stage of the voting?
+**3. How do parties actually vote?** Coalition partners are supposed to vote together, and the opposition is supposed to oppose. But how messy is the reality? Who breaks ranks, and at what stage of the voting?
