@@ -2,7 +2,7 @@
 
 ## Description
 
-All the data for this project comes from the official **Linked Open Data** repository run by the **Camera dei Deputati**. The data gets updated in real time as Parliament does its work, which means we're looking at a live picture of legislative activity.
+All the data for this project comes from the official **Linked Open Data** repository run by the **Chamber of Deputies (Camera dei Deputati)**. The data gets updated in real time as Parliament does its work, which means we're looking at a live picture of legislative activity.
 
 We focused specifically on the XIX Legislature (started on October 13, 2022) which breaks the pattern of the last several years: there is a clear winner in the election, a stable majority, and the government is not mingled together from five different parties that cannot agree on legislatures. That makes it a useful case study for understanding how the Parliament behaves when it's not constantly fighting.
 
@@ -26,10 +26,10 @@ The dataset has distinct categories of missing values (NAs), which are not rando
 
 ## Data Quality and Challenges
 
-Converting the data from RDF format into usable dataframes was the most tedious part of this project. RDF stores everything as triplets, which is useful for representing linked data but doesn't translate easily into tables you need for analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.
+Converting the data from RDF format into usable dataframes was one of the most tedious part of this project. RDF stores everything as triplets, which is useful for representing linked data but doesn't translate easily into tables you need for analysis. We had to write custom parsing scripts to flatten the data out, and in some cases we had to manually reconstruct relationships that got lost in the process.
 
 Another issue was that a lot of fields are just raw strings such as profession and level of education: these often came as free text rather than standardized categories. We spent a fair amount of time cleaning and standardizing these fields before we could do anything useful with them.
 
 ## Access
 
-The data is publicly available through the [dati.camera.it](http://dati.camera.it/it/) portal under an Open Data license (CC-BY 4.0). While the Chamber provides the raw RDF dumps, we transformed these triplets into R dataframes manually.
+The data is publicly available through the [dati.camera.it](https://dati.camera.it/en) portal under an Open Data license (CC-BY 4.0). While the Chamber provides the raw RDF dumps, we transformed these triplets into R dataframes manually.
