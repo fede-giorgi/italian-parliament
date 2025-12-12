@@ -121,7 +121,6 @@ party_colors <- c(
 )
 ```
 
-
 ## The Players (Who Represents Us?)
 
 The XIX Legislature is the first to operate under the new constitutional rules approved in the 2020 referendum, which cut the Chamber of Deputies from **630 to 400**. Now each vote matters more, and each seat is harder to win, so we think the bar for getting elected should be higher.
