@@ -8,7 +8,7 @@ execute:
   message: false
 
 book:
-  title: "italian parliament"
+  title: "Italian Parliament"
   author:
     - Federico Giorgi (fg2617)
     - Rencong Jiang (rj2798)

@@ -6,10 +6,10 @@ But to really understand the finer dynamics of the Italian parliament, we'd need
 
 Future directions to focus on are:
 
-* **Internal cohesion and defectors (*Franchi Tiratori*):** Our current analysis treats parties as monolithic blocks but political drama often happen within the same party. With access to individual roll-call votes (who voted for what), we could measure **Party Discipline Indices** to identify which groups are most prone to internal conflicts and see who votes against their own coalition in secret ballots.
-* **Party switching(*Cambio di Casacca*):** The current analysis we assigned one party per deputy based on election results or current affiliation. We could track changes in the Deputies' affiliation over time and reveal their political loyalty, and whether the old tradition of *trasformismo*(where politicians drift towards the one in power) still exists.
-* **Conflict Analysis:** Applying Natural Language Processing (NLP) to the text of amendments and parliamentary debates would allow us to see which topics spark the most conflict.
-* **Government vs. Parliament Efficiency:** Finally, a crucial metric that is missing the **Success Rate**. How many bills proposed by MPs actually become law compared to those initiated by the Government? Analyzing the "failure rate" of private member bills versus government decrees would tell us a lot about the real balance of power. 
+* **Internal cohesion and defectors (*Franchi Tiratori*):** political drama often happen within the same party. With access to individual roll-call votes (who voted for what), we could measure **Party Discipline** to identify which groups are most likely to internal conflicts and votes against their own coalition.
+* **Party switching(*Cambio di Casacca*):** we assigned one party per deputy based on election results. We could track changes in the Deputies' affiliation over time and reveal their political loyalty, and whether the old tradition of *trasformismo* (where politicians drift towards the one in power) still exists.
+* **Conflict Analysis:** applying Natural Language Processing (NLP) to the text of amendments and parliamentary debates would allow us to see which topics spark the most conflict.
+* **Government vs. Parliament Efficiency:** how many bills proposed by MPs actually become law compared to those initiated by the Government? Analyzing the "failure rate" of private member bills versus government decrees would tell us a lot about the real balance of power. 
 
 
 In conclusion, while the numbers confirm the stability and discipline of the current majority Party, the true health of a democracy is measured not only by the efficiency of its voting machine, but also by the quality of its debate and the independence of its representatives. Expanding this dataset is the first step toward that deeper understanding.

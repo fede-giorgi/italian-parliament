@@ -132,7 +132,7 @@ First we must understand who they are. Are we looking at the same pool of career
 
 The snap elections of **September 25, 2022** produced a clear result that Italy has not seen in a while: the **Center-Right** bloc won a comfortable majority, largely thanks to the rise of *Fratelli d'Italia (FdI)*, which went from being a minor party to the largest one in Parliament in a short time.
 
-This outcome was strenghtened by the "Rosatellum" electoral law: out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). These candidates were supported by the entire coalition, and are often grouped by their broader **bloc**, while the remaining were assigned via proportional plurinominal lists.
+This outcome was strenghtened by the "Rosatellum" electoral law: out of 400 seats, **148 deputies** were elected via the **uninominal colleges** (First Past the Post method). The governing coalition, composed of *Fratelli d'Italia*, *Lega* and *Forza Italia (FI)*, dominated this contest, sweeping 123 of the 148 single-member districts. These candidates were supported by the entire coalition, and are often grouped by their broader **bloc**, while the remaining were assigned via proportional plurinominal lists. 
 
 But does the electoral victory actually translate into control of the Chamber? The numbers suggest **Yes**.
 
@@ -184,8 +184,6 @@ There's a tension in Italian politics right now when it comes to gender represen
 Is this a true paradox? The data below provides a answer: **No.**
 
 While the Right produced the national figurehead, **Left and Center-Left parties elect and maintain a significantly higher percentage of women**. Meloni may be the most visible woman in Italian politics, but her own coalition is still predominantly male.
-
-The chart below visualizes this divide, sorting parties by their percentage of female representatives.
 
 ```{r gender_diverging}
 # 1. Prepare Data with Overall Benchmark
@@ -262,7 +260,7 @@ ggplot(df_gender_plot, aes(x = party_acronym, y = plot_pct, fill = gender)) +
   )
 ```
 ### Education Gap: Women Need a Higher Bar to Enter Parliament
-Women are underrepresented in Parliament, but the women who do get elected tend to be more educated than the men. This suggests that women may need stronger credentials just to be considered viable candidates in the first place.
+While women are underrepresented in Parliament, they tend to be more educated than the men. This suggests that women they need stronger credentials just to be considered viable candidates in the first place.
 
 ```{r gender_education}
 # 1. DATA PREPARATION
@@ -382,8 +380,6 @@ While **Fratelli d'Italia (FdI)** is a national "homogenizer", other forces are 
 * **The Center-North:** The traditional "Red Belt" that represents the **Democratic Party (PD)**.
 * **The South:** The **Five Star Movement (M5S)** dominates here, where people are often discontent because of the economical disadvantages of this region.
 
-The chart below sorts parties by their presence in the North (Blue), revealing a clear gradient from the Alps to the Islands.
-
 ```{r geographic_distribution}
 # 1. Enrich Data with Geography
 df_geo_analysis <- df_deputati_final |>
@@ -485,7 +481,7 @@ df_activity |>
 
 ### Summer Vacation
 
-Parliamentary activity is strictly dictated by the calendar of holidays. 
+Similarly, parliamentary activity is strictly dictated by the calendar of holidays. 
 
 August is a vacation month. The Chamber shuts down for summer vacation and voting activity drops drastically. But the month before that, in July, there's a noticeable spike as deputies rush to do as much as possible before the break. You see a similar pattern around Easter in April, with a smaller peak in March as work ramps up beforehand.
 
@@ -533,9 +529,10 @@ We wanted to see who breaks ranks, and when. Is Parliament as polarized as it lo
 Does the majority on paper translate into actual voting power? 
 To check whether the **Center-Right coalition** can pass legislation, we tracked approved motions over time, looking specifically at votes where the government got the outcome it wanted.
 
-The results are fairly stable. There's a **slight decline over time**, which is expected as government loses slight momentum after the initial period. But even accounting for that, **the vote counts still stays above 201 seats** needed for a majority for most of the time. 
+The results are fairly stable. There's a **slight decline over time**, which is expected as government loses slight momentum after the initial period. Notably, the curve eventually dips slightly below the **absolute majority threshold (201 seats)**.
 
-This suggests that there's enough of a buffer that losing a few votes doesn't cause the legislature to be unstable, unlike previous governments.
+However, this should not be mistaken for a crisis. In the daily reality of the Chamber, **absenteeism** lowers the bar: the Government does not always need 201 votes to pass ordinary legislation; it simply needs to outnumber the opposition present in the room.
+
 
 ```{r stability}
 df_votazioni |>
@@ -562,7 +559,7 @@ df_votazioni |>
 
 ### Polarization vs. Consensus
 
-This scatterplot maps every vote based on "Nays" (x-axis) vs "Ayes" (y-axis). The data clusters into three logical zones:
+While talk shows suggest perpetual chaos, the data reveals a strict order. Legislative activity is far from random and follows a precise Geometry of Power. The data clusters into three logical zones:
 
 * **The Green:** A large number of votes pass with almost no opposition. These are mostly technical or routine matters where there's no real political disagreement.
 * **The Blue:** The Government passes its laws but the opposition fights (voting against them), but the majority numbers still holds.
@@ -607,14 +604,13 @@ ggplot(df_vote_analysis, aes(x = contrari, y = favorevoli, color = outcome)) +
 
 ### Strategic Abstention
 
-When the opposition abstains together it's a powerful political move: they are effectively not support this law, but also not stop it.
-
+When the opposition abstains together it's a powerful political move: they are effectively not support this law, but also not stop it. 
 This usually happens in two scenarios:
 
 * **Tactical Agreements:** The government accepts an opposition's amendment in exchange for the opposition to step back instead of voting against.
 * **Shared Responsibility:** On sensitive topics (foreign policy, ethical issues), voting against might be unpopular, so they abstain instead.
 
-The scatterplot below highlights the **"Purple Zone"**: votes where **Abstentions outnumbered Nays**. These are the moments where the conflict was suspended.
+The data reveals a distinct **"Purple Zone"**: votes where **Abstentions outnumbered Nays**. These are the moments where the conflict was suspended.
 
 ```{r abstention}
 # 1. Data Preparation: defining Voting Behavior
@@ -662,12 +658,11 @@ Legislative activity is divided into two distinct phases: the discussion of **Am
 
 The visual comparison below shows voting patterns in those two phases:
 
-* **Amendments (Grey):** This scatterplot mirrors the chaos of the general "Geometry of Consensus". The distribution is scattered and chaotic, without clear blocs or clean party divisions.
-* **Final Votes (Red):** The ambiguity disappears here, and **almost all laws pass**. The dots condense into two specific zones:
+* **Amendments (Grey):** This phase perfectly mirrors the general "Geometry of Consensus".
+* **Final Votes (Red):** The picture changes drastically. The previous red area of rejected proposals **disappears**. During the final vote, the Government does not take risks. The Opposition's attempts are already dead, and **almost all laws pass**. The dots condense into two specific zones:
     1.  **Unanimity:** Broad agreement (top-left corner).
     2.  **Majority Force:** The coalition lines up to push political laws through (top-center).
 
-When it comes to the final roll call, we don't see any more fighting, and the result is more clean-cut.
 
 ```{r final_vs_amendments}
 # 1. Data Preparation: Distinguish Final Laws from Amendments
